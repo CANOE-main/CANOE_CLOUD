@@ -1,0 +1,16 @@
+pandas
+numpy
+requests
+duckdb
+pyarrow
+lxml
+html5lib
+beautifulsoup4
+PyYAML
+matplotlib
+openpyxl
+xlrd
+scipy
+xmltodict
+python-dotenv
+pytest
