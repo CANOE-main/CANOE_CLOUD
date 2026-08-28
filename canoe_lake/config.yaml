@@ -29,6 +29,9 @@ nrcan:
   year: 2023
   handbook_year: 2021
 
+statcan:
+  year: 2023
+
 renewables_ninja:
   date_from: "2022-01-01"
   date_to: "2022-12-31"

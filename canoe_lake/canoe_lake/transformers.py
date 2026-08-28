@@ -1,7 +1,15 @@
 import json
 import pandas as pd
 from pathlib import Path
+import yaml
 from canoe_lake.silver import register_silver
+
+def get_config():
+    config_path = Path(__file__).resolve().parent.parent / "config.yaml"
+    if config_path.exists():
+        with open(config_path, "r") as f:
+            return yaml.safe_load(f)
+    return {}
 
 @register_silver("eia_table3", bronze_source="eia")
 def transform_eia_table3(bronze_path: Path) -> pd.DataFrame:
@@ -49,8 +57,10 @@ def transform_statcan(bronze_path: Path) -> pd.DataFrame:
     ]
     FUEL_LIST = ['Total primary and secondary energy']
     
+    statcan_year = get_config().get("statcan", {}).get("year", 2023)
+    
     df1 = df[['REF_DATE', 'GEO', 'Fuel type', 'Supply and demand characteristics', 'VALUE']].copy()
-    df1 = df1[df1['REF_DATE'] == 2023]
+    df1 = df1[df1['REF_DATE'] == statcan_year]
     df1 = df1[df1['GEO'].isin(REGION_LIST)]
     df1 = df1[df1['Fuel type'].isin(FUEL_LIST)]
     df1 = df1[df1['Supply and demand characteristics'].isin(SECTOR_LIST)]
