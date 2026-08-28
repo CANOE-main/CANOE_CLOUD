@@ -104,11 +104,17 @@ def ingest_coders(output_dir: Path) -> dict:
 def ingest_statcan(output_dir: Path) -> dict:
     """Ingests StatCan Tables: 25-10-0029, 17-10-0009, 17-10-0057, 38-10-0048."""
     tables = ["25100029", "17100009", "17100057", "38100048"]
+    
+    # StatCan blocks default python-requests user agents.
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    
     for tbl in tables:
         url = f"https://www150.statcan.gc.ca/n1/tbl/csv/{tbl}-eng.zip"
         logger.info(f"Downloading StatCan data from {url}")
         
-        resp = requests.get(url, timeout=60)
+        resp = requests.get(url, headers=headers, timeout=60)
         resp.raise_for_status()
         
         file_path = output_dir / f"{tbl}-eng.zip"
