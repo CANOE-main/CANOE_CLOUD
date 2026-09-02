@@ -16,6 +16,7 @@ class GoldConnector:
     
     # File ID specifically for the `silver.zip` file to bypass rate limits
     SILVER_ZIP_FILE_ID = "1_B2pXfQtxdP6F7s2EZZv6iZCkWDUMBri"
+    RENEWABLES_CACHE_ZIP_FILE_ID = "1U8SxKezPpENb94-OGR-aFoUbq73q-M99"
     
     def __init__(self, cache_dir: str = "./silver_cache", target_date: str = None):
         self.cache_dir = Path(cache_dir)
@@ -56,6 +57,7 @@ class GoldConnector:
         
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         zip_path = self.cache_dir / "silver.zip"
+        renewables_zip_path = self.cache_dir / "renewables_cache.zip"
         
         logger.info(f"Connecting to Google Drive to download Silver layer zip...")
         # Download the single zip file to bypass folder rate-limits
@@ -64,6 +66,13 @@ class GoldConnector:
         logger.info(f"Extracting {zip_path}...")
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             # We extract to cache_dir because the zip itself likely contains the "silver" folder
+            zip_ref.extractall(self.cache_dir)
+            
+        logger.info(f"Connecting to Google Drive to download Renewables Cache zip...")
+        gdown.download(id=self.RENEWABLES_CACHE_ZIP_FILE_ID, output=str(renewables_zip_path), quiet=False, use_cookies=False)
+        
+        logger.info(f"Extracting {renewables_zip_path}...")
+        with zipfile.ZipFile(renewables_zip_path, 'r') as zip_ref:
             zip_ref.extractall(self.cache_dir)
             
         logger.info("Silver layer synchronization and extraction complete.")
@@ -223,6 +232,29 @@ class GoldConnector:
                 logger.error(f"Failed to load other dataset {file.name}: {e}")
         return others
 
+    def get_renewables_cache(self) -> dict:
+        """
+        Loads the renewables cache datasets.
+        
+        Returns:
+            dict: Dictionary containing DataFrames for renewables capacity, cost, etc.
+        """
+        renewables = {}
+        renewables_dir = self.cache_dir / "renewables"
+        
+        if renewables_dir.exists():
+            files = list(renewables_dir.rglob("*.parquet"))
+            for file in files:
+                name = file.stem
+                try:
+                    renewables[name] = pd.read_parquet(file)
+                except Exception as e:
+                    logger.error(f"Failed to load renewables file {file.name}: {e}")
+        else:
+            logger.warning(f"Renewables cache directory {renewables_dir} not found. Run sync_from_drive() first.")
+            
+        return renewables
+
 if __name__ == "__main__":
     # Example usage script for Gold Layer modelers
     connector = GoldConnector()
@@ -238,8 +270,10 @@ if __name__ == "__main__":
     macro = connector.get_macro_indicators()
     nrcan = connector.get_nrcan_data()
     others = connector.get_other_datasets()
+    renewables = connector.get_renewables_cache()
     
     logger.info("Successfully loaded all requested datasets into memory!")
     logger.info(f"Loaded {len(weather)} weather region matrices.")
     logger.info(f"Loaded {len(coders)} CODERS tables.")
     logger.info(f"Loaded {len(nrcan)} NRCAN tables.")
+    logger.info(f"Loaded {len(renewables)} renewables cache tables.")

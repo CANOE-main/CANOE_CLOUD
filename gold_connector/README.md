@@ -6,10 +6,10 @@ Welcome to the CANOE Data Lake Gold Connector! This utility script is designed s
 
 Because the Silver layer contains highly compressed Parquet files that are queried across Canada and the US, downloading them individually via scripts often hits Google Drive's API rate limits. 
 
-To completely bypass this, we have uploaded the entire Data Lake as a single highly-compressed `.zip` file on Google Drive. The `GoldConnector` Python class is now programmed to automatically:
+To completely bypass this, we have uploaded the datasets as highly-compressed `.zip` files on Google Drive. The `GoldConnector` Python class is now programmed to automatically:
 1. Connect to Google Drive
-2. Download the single `silver.zip` file
-3. Extract it locally into `./silver_cache/silver/`
+2. Download the `silver.zip` and `renewables_cache.zip` files
+3. Extract them locally into `./silver_cache/`
 
 You don't need to manually click anything in your browser!
 
@@ -67,6 +67,12 @@ commercial_bc_df = nrcan["nrcan_com_BC_32"]
 macro = connector.get_macro_indicators() # CER and StatCan
 ieso = connector.get_ieso_generation()   # IESO hourly/monthly
 others = connector.get_other_datasets()  # ATB, EPA, Renewables Ninja
+
+# ---------------------------------------------------------
+# 6. Renewables Cache
+# ---------------------------------------------------------
+renewables = connector.get_renewables_cache()
+capacity_factor_df = renewables.get("capacity_factor")
 ```
 
 ### Processing Data
