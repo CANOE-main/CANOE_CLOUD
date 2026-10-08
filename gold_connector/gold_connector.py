@@ -15,7 +15,7 @@ class GoldConnector:
     """
     
     # File ID specifically for the `silver.zip` file to bypass rate limits
-    SILVER_ZIP_FILE_ID = "1_B2pXfQtxdP6F7s2EZZv6iZCkWDUMBri"
+    SILVER_ZIP_FILE_ID = "163zEbqGWosuEih9Al83-MuT_fW7VnZgU"
     RENEWABLES_CACHE_ZIP_FILE_ID = "1U8SxKezPpENb94-OGR-aFoUbq73q-M99"
     
     def __init__(self, cache_dir: str = "./silver_cache", target_date: str = None):
