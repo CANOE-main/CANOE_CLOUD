@@ -46,3 +46,29 @@ canoe-lake silver build atb
 - `canoe_lake/ingestors.py`: All `@register_ingestor` definitions for data sources.
 - `canoe_lake/transformers.py`: All `@register_silver` transformations mapping Bronze to Silver.
 - `migrations/01_initial.sql`: The primary schema definition for the Data Lake DuckDB Catalog.
+
+## Transportation sector sources (bronze)
+These ingestors download the raw files that canoe-transportation uses (see its `config/sources.yaml`). There are no silver transforms for them yet. URLs and pinned checksums live in `config.yaml`. If a download does not match its pinned sha256, md5 or byte count, the ingest fails and nothing is catalogued.
+
+| Code | Publisher and dataset |
+|---|---|
+| `nrcan_ceud_transport` | NRCan CEUD Transportation tables, each province separately (AB, BCT, MB, NB, NL, NS, ON, PE, QC, SK) plus Canada |
+| `nrcan_fcr` | NRCan Fuel Consumption Ratings |
+| `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page) |
+| `statcan_transport` | StatCan 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 (WDS ZIP and metadata) |
+| `ontario_mto` | Ontario MTO vehicle population ZIPs |
+| `izev` | Transport Canada iZEV incentive records |
+| `atb_transport` | NLR Transportation ATB |
+| `afdc` | AFDC Canadian electric charging stations (`NLR_API_KEY`, default `DEMO_KEY`) |
+| `nhtsa_cafe` | NHTSA CAFE 2024 Central Analysis inputs |
+| `nhts` | FHWA NHTS 2022 public-use data |
+| `faa` | FAA Economic Values, sections 3 and 4 |
+| `fueleconomy` | FuelEconomy.gov vehicles.csv.zip |
+| `eia_nems` | EIA NEMS trnhdvx.xlsx (pinned commit) |
+| `epa_moves` | EPA MOVES6 population and activity report |
+| `gcam` | JGCRI GCAM UCD_trn_data_CORE.csv (pinned commit) |
+| `epri_regen` | EPRI US-REGEN v2025 transportation page and data module |
+| `hatch` | HATCH technology growth evidence (Zenodo) |
+| `eafo` | EAFO Norway fleet and registrations |
+
+CER Canada's Energy Future is covered by the `cer` ingestor. Sources that cannot be downloaded (GREET, Autonomie/BEAN, RAMP charging profiles, EPA OMEGA extract and reviewed manual values) go through `bronze register-manual`.

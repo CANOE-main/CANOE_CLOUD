@@ -355,3 +355,381 @@ def ingest_epa(output_dir: Path) -> dict:
         "file_format": "dir",
         "notes": "EPA GHG Emission Factors 2025"
     }
+
+# ---------------------------------------------------------------------------
+# Transportation sector sources (bronze only). URLs, editions and pinned
+# checksums follow canoe-transportation's config/sources.yaml.
+# ---------------------------------------------------------------------------
+
+def download_file(url: str, file_path: Path, sha256: str = None, md5: str = None, size: int = None,
+                  session=None, params: dict = None, retries: int = 3) -> Path:
+    """Downloads url to file_path and checks any pinned sha256, md5 or byte count.
+
+    Raises ValueError when the download does not match a pin, so the ingest fails
+    instead of registering a file that differs from the one transport validated.
+    """
+    import time
+    import hashlib
+
+    getter = session or requests
+    for attempt in range(1, retries + 1):
+        try:
+            with getter.get(url, params=params, timeout=(15, 300), stream=True) as r:
+                r.raise_for_status()
+                h_sha256, h_md5 = hashlib.sha256(), hashlib.md5()
+                with open(file_path, "wb") as f:
+                    for chunk in r.iter_content(chunk_size=1 << 20):
+                        f.write(chunk)
+                        h_sha256.update(chunk)
+                        h_md5.update(chunk)
+            break
+        except requests.RequestException as e:
+            if attempt == retries:
+                raise
+            logger.warning(f"Retrying {url} after error: {e}")
+            time.sleep(attempt)
+
+    actual_size = file_path.stat().st_size
+    if size is not None and actual_size != size:
+        raise ValueError(f"{file_path.name}: expected {size} bytes, got {actual_size} ({url})")
+    if sha256 and h_sha256.hexdigest() != sha256:
+        raise ValueError(f"{file_path.name}: sha256 {h_sha256.hexdigest()} does not match pinned {sha256} ({url})")
+    if md5 and h_md5.hexdigest() != md5:
+        raise ValueError(f"{file_path.name}: md5 {h_md5.hexdigest()} does not match pinned {md5} ({url})")
+    return file_path
+
+@register_ingestor("nrcan_ceud_transport")
+def ingest_nrcan_ceud_transport(output_dir: Path) -> dict:
+    """Ingests NRCan CEUD Transportation Sector Excel tables, every province separately plus Canada."""
+    import time
+
+    year = get_config().get("nrcan_ceud_transport", {}).get("year", 2023)
+    base_url = f"https://oee.nrcan.gc.ca/corporate/statistics/neud/dpa/data_e/downloads/comprehensive/Excel/{year}"
+    # Provinces are not merged here: NB, NS, PE and NL are each downloaded on their own.
+    regions = ["ab", "bct", "mb", "nb", "nl", "ns", "on", "pe", "qc", "sk"]
+    provincial_tables = [7, 14, 15, 17, 18, 19, 20, 21, 28, 29, 30, 31, 32, 34, 35, 36, 37]
+    national_tables = [20, 21, 26, 27, 28]
+
+    sess = requests.Session()
+    sess.headers.update({"User-Agent": "canoe-etl/1.0"})
+
+    files = [(region, tbl) for region in regions for tbl in provincial_tables]
+    files += [("ca", tbl) for tbl in national_tables]
+    for region, tbl in files:
+        name = f"tran_{region}_e_{tbl}.xls"
+        logger.info(f"Downloading NRCan CEUD {year} {name}")
+        download_file(f"{base_url}/{name}", output_dir / name, session=sess)
+        time.sleep(0.5)  # Be polite
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": base_url,
+        "file_format": "dir",
+        "notes": f"NRCan CEUD Transportation {year}: {len(provincial_tables)} tables for each of {', '.join(regions)}; national tables {', '.join(map(str, national_tables))}"
+    }
+
+@register_ingestor("nrcan_fcr")
+def ingest_nrcan_fcr(output_dir: Path) -> dict:
+    """Ingests NRCan Fuel Consumption Ratings CSVs (pinned English resources)."""
+    files = get_config().get("nrcan_fcr", {}).get("files", [])
+    for item in files:
+        logger.info(f"Downloading NRCan Fuel Consumption Ratings from {item['url']}")
+        download_file(item["url"], output_dir / item["name"], md5=item.get("md5"), size=item.get("bytes"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "multiple_nrcan_fcr_csvs",
+        "file_format": "dir",
+        "notes": f"NRCan Fuel Consumption Ratings: {', '.join(item['name'] for item in files)}"
+    }
+
+@register_ingestor("dunsky")
+def ingest_dunsky(output_dir: Path) -> dict:
+    """Ingests the Dunsky EV Charging Infrastructure for Canada report page (NRCan, Feb 2024)."""
+    cfg = get_config().get("dunsky", {})
+    url = cfg["url"]
+    logger.info(f"Downloading Dunsky report page from {url}")
+    file_path = download_file(url, output_dir / "electric-vehicle-charging-infrastructure-canada.html",
+                              sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "html",
+        "notes": "Dunsky Electric Vehicle Charging Infrastructure for Canada, 2024 update"
+    }
+
+@register_ingestor("statcan_transport")
+def ingest_statcan_transport(output_dir: Path) -> dict:
+    """Ingests StatCan transport tables 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 via WDS."""
+    tables = ["20100021", "20100025", "23100308", "34100254", "23100142"]
+    pins = get_config().get("statcan_transport", {}).get("pins", {})
+
+    # StatCan blocks default python-requests user agents.
+    sess = requests.Session()
+    sess.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    })
+
+    for tbl in tables:
+        pin = pins.get(int(tbl), {})
+        resp = sess.get(f"https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadCSV/{tbl}/en", timeout=60)
+        resp.raise_for_status()
+        zip_url = resp.json()["object"]
+        logger.info(f"Downloading StatCan table {tbl} from {zip_url}")
+        download_file(zip_url, output_dir / f"{tbl}-eng.zip", sha256=pin.get("zip_sha256"), session=sess)
+
+        resp = sess.post("https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
+                         json=[{"productId": int(tbl)}], timeout=60)
+        resp.raise_for_status()
+        file_path = output_dir / f"{tbl}-metadata.json"
+        with open(file_path, "wb") as f:
+            f.write(resp.content)
+        if pin.get("metadata_sha256"):
+            import hashlib
+            digest = hashlib.sha256(resp.content).hexdigest()
+            if digest != pin["metadata_sha256"]:
+                raise ValueError(f"{file_path.name}: sha256 {digest} does not match pinned {pin['metadata_sha256']}")
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "api",
+        "source_url_or_doc_id": "multiple_statcan_tables",
+        "file_format": "dir",
+        "notes": "StatCan Tables 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 with WDS cube metadata"
+    }
+
+@register_ingestor("ontario_mto")
+def ingest_ontario_mto(output_dir: Path) -> dict:
+    """Ingests Ontario Ministry of Transportation annual vehicle population ZIPs."""
+    files = get_config().get("ontario_mto", {}).get("files", [])
+    for item in files:
+        logger.info(f"Downloading Ontario vehicle population {item['year']} from {item['url']}")
+        download_file(item["url"], output_dir / f"{item['year']}_vehicle_population_data.zip", sha256=item.get("sha256"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "https://data.ontario.ca/dataset/vehicle-population-data",
+        "file_format": "dir",
+        "notes": f"Ontario MTO vehicle population data {', '.join(str(item['year']) for item in files)}"
+    }
+
+@register_ingestor("izev")
+def ingest_izev(output_dir: Path) -> dict:
+    """Ingests Transport Canada iZEV incentive CSVs and the data dictionary."""
+    cfg = get_config().get("izev", {})
+    files = cfg.get("files", [])
+    for item in files:
+        logger.info(f"Downloading iZEV data from {item['url']}")
+        download_file(item["url"], output_dir / item["name"], md5=item.get("md5"), size=item.get("bytes"))
+    download_file(cfg["dictionary_url"], output_dir / "izev-data-dictionary.pdf")
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1",
+        "file_format": "dir",
+        "notes": "Transport Canada iZEV November 2025 English snapshots and data dictionary"
+    }
+
+@register_ingestor("atb_transport")
+def ingest_atb_transport(output_dir: Path) -> dict:
+    """Ingests the NLR (NREL) Transportation ATB data ZIP."""
+    url = get_config().get("atb_transport", {}).get("url", "https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip")
+    logger.info(f"Downloading Transportation ATB from {url}")
+    file_path = download_file(url, output_dir / url.rsplit("/", 1)[-1])
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "zip",
+        "notes": "NLR 2024 Transportation ATB v1"
+    }
+
+@register_ingestor("afdc")
+def ingest_afdc(output_dir: Path) -> dict:
+    """Ingests AFDC Canadian electric charging station snapshots from the NLR API."""
+    api_key = os.environ.get("NLR_API_KEY", "DEMO_KEY")
+    snapshots = get_config().get("afdc", {}).get("snapshots", [])
+    for item in snapshots:
+        logger.info(f"Requesting AFDC stations from {item['url']} with {item['query']}")
+        download_file(item["url"], output_dir / item["name"], params={**item["query"], "api_key": api_key},
+                      sha256=item.get("sha256"), size=item.get("bytes"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "api",
+        "source_url_or_doc_id": "https://developer.nlr.gov/api/alt-fuel-stations/",
+        "file_format": "dir",
+        "notes": f"AFDC Canadian electric stations: {', '.join(item['name'] for item in snapshots)}"
+    }
+
+@register_ingestor("nhtsa_cafe")
+def ingest_nhtsa_cafe(output_dir: Path) -> dict:
+    """Ingests NHTSA CAFE 2024 Final Rule Central Analysis inputs ZIP."""
+    cfg = get_config().get("nhtsa_cafe", {})
+    url = cfg["url"]
+    logger.info(f"Downloading NHTSA CAFE inputs from {url}")
+    file_path = download_file(url, output_dir / "Central_Analysis_Inputs.zip", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "zip",
+        "notes": "NHTSA CAFE 2024-FRM-LD-2b3-2027-2035 Central Analysis inputs"
+    }
+
+@register_ingestor("nhts")
+def ingest_nhts(output_dir: Path) -> dict:
+    """Ingests FHWA NHTS 2022 V2.1 public-use CSVs, codebook, user guide and release notes."""
+    files = get_config().get("nhts", {}).get("files", [])
+    for item in files:
+        logger.info(f"Downloading NHTS from {item['url']}")
+        download_file(item["url"], output_dir / item["name"], sha256=item.get("sha256"), size=item.get("bytes"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "https://nhts.ornl.gov/",
+        "file_format": "dir",
+        "notes": "FHWA NHTS 2022 V2.1 public-use data and documentation"
+    }
+
+@register_ingestor("faa")
+def ingest_faa(output_dir: Path) -> dict:
+    """Ingests FAA Economic Values report sections 3 (capacity) and 4 (operating costs)."""
+    files = get_config().get("faa", {}).get("files", [])
+    for item in files:
+        logger.info(f"Downloading FAA Economic Values from {item['url']}")
+        download_file(item["url"], output_dir / item["name"], sha256=item.get("sha256"), size=item.get("bytes"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "https://www.faa.gov/regulations_policies/policy_guidance/benefit_cost",
+        "file_format": "dir",
+        "notes": "FAA Economic Values for Investment and Regulatory Decisions 2024, sections 3 and 4"
+    }
+
+@register_ingestor("fueleconomy")
+def ingest_fueleconomy(output_dir: Path) -> dict:
+    """Ingests the FuelEconomy.gov vehicles.csv.zip."""
+    cfg = get_config().get("fueleconomy", {})
+    url = cfg.get("url", "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip")
+    logger.info(f"Downloading FuelEconomy.gov vehicles from {url}")
+    file_path = download_file(url, output_dir / "vehicles.csv.zip", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "zip",
+        "notes": "FuelEconomy.gov Find a Car vehicle data"
+    }
+
+@register_ingestor("eia_nems")
+def ingest_eia_nems(output_dir: Path) -> dict:
+    """Ingests the EIA NEMS trnhdvx.xlsx transportation input workbook at a pinned commit."""
+    cfg = get_config().get("eia_nems", {})
+    url = cfg["url"]
+    logger.info(f"Downloading EIA NEMS workbook from {url}")
+    file_path = download_file(url, output_dir / "trnhdvx.xlsx", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "xlsx",
+        "notes": "EIA NEMS input/tdm/trnhdvx.xlsx"
+    }
+
+@register_ingestor("epa_moves")
+def ingest_epa_moves(output_dir: Path) -> dict:
+    """Ingests EPA Population and Activity of Onroad Vehicles in MOVES6 (EPA-420-R-26-010)."""
+    cfg = get_config().get("epa_moves", {})
+    url = cfg["url"]
+    logger.info(f"Downloading EPA MOVES6 report from {url}")
+    file_path = download_file(url, output_dir / "420r26010.pdf", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "pdf",
+        "notes": "EPA-420-R-26-010, August 2026"
+    }
+
+@register_ingestor("gcam")
+def ingest_gcam(output_dir: Path) -> dict:
+    """Ingests the JGCRI GCAM core UCD_trn_data_CORE.csv at a pinned commit."""
+    cfg = get_config().get("gcam", {})
+    url = cfg["url"]
+    logger.info(f"Downloading GCAM UCD transportation data from {url}")
+    file_path = download_file(url, output_dir / "UCD_trn_data_CORE.csv", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+
+    return {
+        "file_path": str(file_path),
+        "source_type": "url",
+        "source_url_or_doc_id": url,
+        "file_format": "csv",
+        "notes": "JGCRI GCAM core UCD transportation data"
+    }
+
+@register_ingestor("epri_regen")
+def ingest_epri_regen(output_dir: Path) -> dict:
+    """Ingests the EPRI US-REGEN v2025 transportation assumptions page and its data module."""
+    cfg = get_config().get("epri_regen", {})
+    logger.info(f"Downloading EPRI US-REGEN page from {cfg['url']}")
+    download_file(cfg["url"], output_dir / "transportation.html", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
+    logger.info(f"Downloading EPRI US-REGEN data module from {cfg['payload_url']}")
+    download_file(cfg["payload_url"], output_dir / cfg["payload_url"].rsplit("/", 1)[-1],
+                  sha256=cfg.get("payload_sha256"), size=cfg.get("payload_bytes"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": cfg["url"],
+        "file_format": "dir",
+        "notes": "EPRI US-REGEN v2025 transportation assumptions page and JavaScript data module"
+    }
+
+@register_ingestor("hatch")
+def ingest_hatch(output_dir: Path) -> dict:
+    """Ingests HATCH technology growth evidence from Zenodo records 10231865, 10056128 and 19579793."""
+    files = get_config().get("hatch", {}).get("files", [])
+    for item in files:
+        logger.info(f"Downloading HATCH file from {item['url']}")
+        download_file(item["url"], output_dir / item["name"], sha256=item.get("sha256"), size=item.get("bytes"))
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "multiple_zenodo_records",
+        "file_format": "dir",
+        "notes": "HATCH original (Zenodo 10231865, 10056128) and extended (Zenodo 19579793) files"
+    }
+
+@register_ingestor("eafo")
+def ingest_eafo(output_dir: Path) -> dict:
+    """Ingests EAFO Norway fleet, registrations and shares CSVs and their page."""
+    import time
+
+    files = get_config().get("eafo", {}).get("files", [])
+    for item in files:
+        logger.info(f"Downloading EAFO file from {item['url']}")
+        download_file(item["url"], output_dir / item["name"], sha256=item.get("sha256"), size=item.get("bytes"))
+        time.sleep(2)  # EAFO rate-limits rapid requests (HTTP 429)
+
+    return {
+        "file_path": str(output_dir),
+        "source_type": "url",
+        "source_url_or_doc_id": "https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/norway/vehicles-and-fleet",
+        "file_format": "dir",
+        "notes": "EAFO Norway M1/N1/N2-N3 fleet, new registrations and shares"
+    }
