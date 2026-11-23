@@ -49,3 +49,313 @@ weather_mapping:
     PEI: {ca: "CA.PE", us: "ME"}
     NS: {ca: "CA.NS", us: "ME"}
     NB: {ca: "CA.NB", us: "ME"}
+
+# Transportation sector sources (bronze). URLs and pinned checksums follow
+# canoe-transportation config/sources.yaml; a mismatch fails the ingest.
+nrcan_ceud_transport:
+  year: 2023
+nrcan_fcr:
+  files:
+  - name: my2012-2026-battery-electric-vehicles.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/026e45b4-eb63-451f-b34f-d9308ea3a3d9/download/my2012-2026-battery-electric-vehicles.csv
+    md5: aed9e4b209985d925d5c35c729ddd632
+    bytes: 138739
+  - name: my2012-2026-plug-in-hybrid-electric-vehicles.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/8812228b-a6aa-4303-b3d0-66489225120d/download/my2012-2026-plug-in-hybrid-electric-vehicles.csv
+    md5: 13e96c9373ec42288fa16a160b3762e5
+    bytes: 53663
+  - name: my1995-2014-fuel-consumption-ratings-5-cycle.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/42495676-28b7-40f3-b0e0-3d7fe005ca56/download/my1995-2014-fuel-consumption-ratings-5-cycle.csv
+    md5: 6aabfb074aaf1a5fc1febfccf96910ce
+    bytes: 1432995
+  - name: my2015-2024-fuel-consumption-ratings.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/c98b9dc8-b23f-4cd8-8b19-e892da1e4688/download/my2015-2024-fuel-consumption-ratings.csv
+    md5: dfa99fce2a857e2de17df70d40bcf210
+    bytes: 827253
+  - name: my2025-fuel-consumption-ratings.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/d589f2bc-9a85-4f65-be2f-20f17debfcb1/download/my2025-fuel-consumption-ratings.csv
+    md5: cd8f4c0010ce151d1352b26f2a92bf8d
+    bytes: 60700
+  - name: my2026-fuel-consumption-ratings.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/9df1b18d-d036-4783-a61c-99f1f75b3ac5/download/my2026-fuel-consumption-ratings.csv
+    md5: e8f8b26255d9534b7989b00f8a0f8650
+    bytes: 53702
+dunsky:
+  url: https://natural-resources.canada.ca/energy-efficiency/transportation-energy-efficiency/resource-library/electric-vehicle-charging-infrastructure-canada
+  sha256: e4592af5443703fd1e563fae58ade15fc4cf5591efc142d0c2cb361f776e9730
+  bytes: 441179
+statcan_transport:
+  pins:
+    23100308:
+      zip_sha256: 09397af821ad73962b555b558d8547fa75ff8c22c28a9d383e20ed58ff43d608
+      metadata_sha256: 08007a6bbbe9ddb6fc9b70743cc698eed9c5d9d7fa9d8683ae55ba4967401ab9
+ontario_mto:
+  files:
+  - year: 2014
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/f512f110-bf88-4c59-b223-af5ea0a14f6d/download/2014.zip
+    sha256: 3e4d6bede76fa09e38cfd22cf3aa50d17244d04e7222de79726f15ea421647ae
+  - year: 2016
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/f94b0f78-7ebf-4c66-b937-7f7798508606/download/2016.zip
+    sha256: eb10e08613c53612b316c44f7dcbe72fa74d5064915844db6a915301fe716a7e
+  - year: 2017
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/c61643a9-8338-47c9-b0a8-00f7c6298d05/download/vps_2017.zip
+    sha256: 3d2f83dc16bf3f36c67471fdd727bc91bfa09c13cf15b2a0bd7d319a6fc47514
+  - year: 2018
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/52a9329b-1486-48af-94c4-e68e3684b50b/download/2018.zip
+    sha256: 9f6a85addd0b60273d4c7940dfca6c5f8e5d74aa14556ad3bb83c018fe3d6f27
+  - year: 2019
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/8ca7517e-b524-4dde-8c20-b488f5978800/download/vps_2019.zip
+    sha256: f1567693c423ffea2cee59ab8e1c8bda80678ff34efb3e19f7d87bf007f996b4
+  - year: 2020
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/0d6c5fc6-bb23-4b6b-8310-35965ef78548/download/2020.zip
+    sha256: 9de874bb917c225f8062ccd001ca971ac41439dd5f5e56ff95b82ad029af0226
+  - year: 2021
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/de3411dc-c21b-41f3-ae92-59503b414138/download/2021.zip
+    sha256: 1a4a415ba83560e265c781581640ebf3e3a1bff492ba2753b083b841d08c9dfb
+  - year: 2022
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/7ff95539-e7b2-45c7-b2bb-89070ca739cf/download/2022.zip
+    sha256: b15910e2653cd7bbea515ed26cf51102298b5c265f65819434103eba5ef4e3d1
+  - year: 2023
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/997f4781-5ec5-4ac0-b3ec-6f7ab56f475d/download/2023.zip
+    sha256: b9d11dfef4119e1343be168594359b35125fa4354c21cba5ef42a600a524bc25
+  - year: 2024
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/285aeac6-0027-4321-87dd-beb7794f4aab/download/2024.zip
+    sha256: fc95b0a3a13fd5022c086588bb196083df8bcd0ecb55968e2368779087330b70
+  - year: 2025
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/36dd48e7-f8a8-43e6-a7fa-3d88d356ebf1/download/2025_vps.zip
+    sha256: 672201ec44dd78af96adcce5b3459aa205fb9a03f3983d97d029cd72dcf6e69b
+izev:
+  files:
+  - name: izev-webstats_fy-2019-20-to-fy-2022-23_en_updated-november-2025.csv
+    url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/bba4c959-53ca-4d23-9cde-da3ce771bba2/download/izev-webstats_fy-2019-20-to-fy-2022-23_en_updated-november-2025.csv
+    md5: a51bde3db9a6f217739b885e765e3a1d
+    bytes: 38538045
+  - name: izev-webstats_fy-2023-24_en_updated-november-2025.csv
+    url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/33f35447-fd93-45bc-866c-866aba4b2f4e/download/izev-webstats_fy-2023-24_en_updated-november-2025.csv
+    md5: 9dbab46e9b95c56552baa0293e5b3947
+    bytes: 25304118
+  - name: izev-webstats_fy-2024-25_en_updated-november-2025.csv
+    url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/167cec08-777a-4b29-a3a7-eda79f799bae/download/izev-webstats_fy-2024-25_en_updated-november-2025.csv
+    md5: b9398d9229d5e0ffe770b902a4fa8851
+    bytes: 29288062
+  dictionary_url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/12a8a111-d790-49ce-af7c-ec388345e147/download/izev-data-dictionary-bilingual_-ivze-dictionnaire-de-donnees-bilingue-nov-2025.pdf
+atb_transport:
+  url: https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip
+afdc:
+  snapshots:
+  - name: canada_public_2025-12-31.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v0/historical-date/2025-12-31.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: public
+      status: E
+      limit: all
+    sha256: d22963c84c5876b8465a7317796d361cea65bbe0ef369a192f8114f8a859949c
+    bytes: 45291619
+  - name: canada_mhdv_accessible_2025-12-31.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v0/historical-date/2025-12-31.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: all
+      status: E
+      limit: all
+      maximum_vehicle_class: MD
+    sha256: 3639671255e8cf269c2c184ce8e70ff956e35bef0d32f6f9ca1651de550db98e
+    bytes: 785951
+  - name: canada_mhdv_accessible_2026-11-14.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v1.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: all
+      status: E
+      limit: all
+      maximum_vehicle_class: MD
+    sha256: a88d8e558b03fb5087524d12853b4b862652cd452d37be3be7e2bc859e58b2fb
+    bytes: 948986
+nhtsa_cafe:
+  url: https://static.nhtsa.gov/nhtsa/downloads/CAFE/2024-FRM-LD-2b3-2027-2035/Central-Analysis/Central_Analysis_Inputs.zip
+  sha256: 1c695e1e966bf2f26f9c0cf887c9c1b836e1d18568c5f2fafd63cd6af508a449
+  bytes: 9218140
+eia_nems:
+  url: https://media.githubusercontent.com/media/EIAgov/NEMS/1bfbb2af4c3eb6e884227630ae67eb0e0e3c72ba/input/tdm/trnhdvx.xlsx
+  sha256: 87f1766476ba1916c7b8599a2feb0673aa766af12cfb2fbc655bf9fd574ae5aa
+  bytes: 737310
+epa_moves:
+  url: https://www.epa.gov/system/files/documents/2026-09/420r26010.pdf
+  sha256: 2a216e3794368bb33145e6411b5129b3c8f3ad92dc6433ec4baa801cbe435138
+  bytes: 5713495
+gcam:
+  url: https://raw.githubusercontent.com/JGCRI/gcam-core/11e128fb7ce3e14e9c4daf3903ba73123046a7aa/input/gcamdata/inst/extdata/energy/UCD_trn_data_CORE.csv
+  sha256: 0e0c006e7c7ef6209b2ff1b8aa991a0524ad2219a157739d033e94f9d7849ee0
+  bytes: 1052797
+epri_regen:
+  url: https://us-regen-docs.epri.com/v2025/assumptions/transportation.html
+  sha256: fddf94acbf52401acf7dc2e429a0e758c763959dcb6ac60a999c61bd61c438ad
+  bytes: 2099
+  payload_url: https://us-regen-docs.epri.com/assets/transportation.html-YK_JCUYx.js
+  payload_sha256: c8527351b8777769a15f67f682d63fbc70e866bfd8b0485f8d8388fe723ce9e9
+  payload_bytes: 85536
+faa:
+  files:
+  - name: faa_economic_values_2024_section_3_capacity.pdf
+    url: https://www.faa.gov/regulations_policies/policy_guidance/benefit_cost/econ-value-section-3-capacity.pdf
+    sha256: e59e78ac10a8cf44db15274e8ed7aedd74e87d8c2812f2c26351e7fe4bcf8b96
+    bytes: 759483
+  - name: faa_economic_values_2024_section_4_operating_costs.pdf
+    url: https://www.faa.gov/regulations_policies/policy_guidance/benefit_cost/econ-value-section-4-op-costs.pdf
+    sha256: c0157057f0105535b764889f4a6a1bd571bfcf7a47034d24a9dfd8f13dbbe8d8
+    bytes: 757761
+nhts:
+  files:
+  - name: csv.zip
+    url: https://nhts.ornl.gov/media/2022/download/csv.zip
+    sha256: 64530c396d5f164d2259a22f7042f27bee5147babcd367568ddbfafe6c8bf34c
+    bytes: 4533528
+  - name: codebook.xlsx
+    url: https://nhts.ornl.gov/media/2022/doc/codebook.xlsx
+    sha256: 7e10ff62be0a72b03528f2469e8da850b335b7d761cf6efdfe9eba9b8a513d96
+    bytes: 163714
+  - name: user_guide.pdf
+    url: https://nhts.ornl.gov/media/2022/doc/2022%20NextGen%20NHTS%20User's%20Guide%20V201_PubUse.pdf
+    sha256: bc0e7dc4546db3ff6a465fca928c29f4ecb7fbfe23d44ee7e57add4602d3ba0c
+    bytes: 5666526
+  - name: release_notes.pdf
+    url: https://nhts.ornl.gov/media/2022/doc/2022%20NextGen%20NHTS%20V2.1%20Release%20Notes.pdf
+    sha256: d9f385ab1dc04216f5cb29bd908c520e20e1c52dffef77c17f170e6cefb8b8cb
+    bytes: 732041
+fueleconomy:
+  url: https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip
+  sha256: 1d553896a77898f6cf47128281337af268df053c90dc1365891c7c8abff82c82
+  bytes: 2228192
+hatch:
+  files:
+  - name: 10231865_HATCH_1.0.csv
+    url: https://zenodo.org/api/records/10231865/files/HATCH_1.0.csv/content
+    sha256: cb690dbecb4aca6100ab8974884a1c4d0c707d20b51f4dbe1bc888401952e37e
+    bytes: 103054
+  - name: 10231865_HATCH_v1.5_Clean.csv
+    url: https://zenodo.org/api/records/10231865/files/HATCH_v1.5_Clean.csv/content
+    sha256: fad68762b73cbdfe46c23e5303bfec152885cff7ea0243f7ef9b48475ad5d5bf
+    bytes: 4659711
+  - name: 10231865_HATCH_v1.5_DataSources.csv
+    url: https://zenodo.org/api/records/10231865/files/HATCH_v1.5_DataSources.csv/content
+    sha256: 1a84a7f4fe46059cb35bd6e5fea0f6d07d9cfd1bf8b5d64694c92181b49f6c40
+    bytes: 78338
+  - name: 10231865_Tech_Growth_V1.5_variabledescriptions_Clean.yaml
+    url: https://zenodo.org/api/records/10231865/files/Tech_Growth_V1.5_variabledescriptions_Clean.yaml/content
+    sha256: 8ff1b51e7f03d3a89001ccd2d8a4ec6700c32b23a9c454adb12d79f361bc8344
+    bytes: 37139
+  - name: 10056128_AllGrowthRates.csv
+    url: https://zenodo.org/records/10056128/files/AllGrowthRates.csv?download=1
+    sha256: e7f4df9caf102822f17ebe4af22ecd4811277a0d842f4bbdbc4c8c7e6d3e941d
+    bytes: 10062
+  - name: 19579793_Complexity.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Complexity.xlsx/content
+    sha256: a461f38be5868b422d1be1a1c61d93975cd4cc7f03637a2a52d24f14a84a8090
+    bytes: 13471
+  - name: 19579793_Feedstock.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Feedstock.xlsx/content
+    sha256: 06dc2951e6263f3e377465691265d1fe3ee4413a75d10f079372f6db326df6b5
+    bytes: 18503
+  - name: 19579793_Granularity.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Granularity.xlsx/content
+    sha256: b9d8c7a3579494454b6ff2561e03f3a7fa5cd598888792c53727b810372429d0
+    bytes: 51705
+  - name: 19579793_HATCH_growth_characteristics.csv
+    url: https://zenodo.org/api/records/19579793/files/HATCH_growth_characteristics.csv/content
+    sha256: 9d91a695bd9d3d54fac58e43447bbb00fd7d17d9e3d7b64d7f0a2a72c19a4fa7
+    bytes: 2458166
+  - name: 19579793_HATCH_national_1.5.csv
+    url: https://zenodo.org/api/records/19579793/files/HATCH_national_1.5.csv/content
+    sha256: 75e06e0280bc5120c35644b6b560eb2e5f2927921c53ef5fda8f5510985d1688
+    bytes: 4455497
+  - name: 19579793_HATCH_variable_descriptions.xlsx
+    url: https://zenodo.org/api/records/19579793/files/HATCH_variable_descriptions.xlsx/content
+    sha256: c58f33ffb11ce630c116d98a5afe723026fa3ba87c4bf45ec5774540f6d86797
+    bytes: 15501
+  - name: 19579793_MaterialUse.xlsx
+    url: https://zenodo.org/api/records/19579793/files/MaterialUse.xlsx/content
+    sha256: 6f41856d8f2f975dec97c4cde6152087f3c813fd4a25153f7a87e38c015067db
+    bytes: 77248
+  - name: 19579793_Need_For_Customization.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Need_For_Customization.xlsx/content
+    sha256: 3c53ca5be2aec8af74cea66bb9f34a5c51aa941c7ee134627a4a940fa7dda75b
+    bytes: 13456
+  - name: 19579793_Tech_Lifetime.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Tech_Lifetime.xlsx/content
+    sha256: 17eb1861073e61498cc2a04e8fa1456b2278500f973958a0c70deda5aa304b6c
+    bytes: 33770
+  - name: 19579793_Tech_Replacement.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Tech_Replacement.xlsx/content
+    sha256: c23ceb0f100f33c205c57f6d1d6e2bdd6c79fd33b869544caf630b0a64635f1a
+    bytes: 17974
+  - name: 19579793_Technology Categories.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Technology%20Categories.xlsx/content
+    sha256: dc8a487635db0c197795416ff4cca38522ceee483acd49fc47b0990526ddcccc
+    bytes: 15322
+  - name: 19579793_Type_Of_Adopter.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Type_Of_Adopter.xlsx/content
+    sha256: 9a721f339682962966b9522e97ee421e5ba88ddab48692dd9f040fa12d93278b
+    bytes: 13434
+  - name: 19579793_Year_First_Commercialization.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Year_First_Commercialization.xlsx/content
+    sha256: da8406bf227775d2b7e52d04f4ac9cfaf94cde12c5b53835a8635a1f19fdc280
+    bytes: 44851
+eafo:
+  files:
+  - name: eafo_norway_2026-10-07.html
+    url: https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/norway/vehicles-and-fleet
+    sha256: f08f9f60cd1985280a57c3f580dc96caa272d16ead8a034fa1c70b3777f9d7f5
+    bytes: 109119
+  - name: af_percentage_total_fleet_m1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_m1.csv
+    sha256: 4192409ec8ec49c8a36d87b6a6a727e9e4a123af2e799909b9e70f4e2c01f6a1
+    bytes: 479
+  - name: af_percentage_total_fleet_n1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_n1.csv
+    sha256: 97a00600e4c3e17dd9b011c609c07a260c37f7345f3771001f7d711b5304b05f
+    bytes: 358
+  - name: af_percentage_total_fleet_n2_n3.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_n2_n3.csv
+    sha256: 8dd6318344c0fbbedcaaad8aa803e0c0af0d164ee5aefc0744c436764ac1e6eb
+    bytes: 342
+  - name: fleet_m1_total_number.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_m1_total_number.csv
+    sha256: 40f657ff0724ae6b1bba0e213731fe3180f0b8f1390cb3b3207339e8dd7d3694
+    bytes: 532
+  - name: fleet_n1_total_number.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_n1_total_number.csv
+    sha256: c5e0e390584431fe2a741ddf6eb52f12b31e862dac383cf11e574f8501fd98c6
+    bytes: 371
+  - name: fleet_n2_n3_total_number.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_n2_n3_total_number.csv
+    sha256: 87e5ebcff48a795f1fefb6356e3bdb2da0bb2223ffa860c8224cb9ddd9c042c9
+    bytes: 329
+  - name: market_share_new_registrations_m1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_m1.csv
+    sha256: 274f9fbfc631f4c1b4b33be867934cbb6fcd0983f5b4104ed7adcc35700c7b6e
+    bytes: 447
+  - name: market_share_new_registrations_n1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_n1.csv
+    sha256: 09415fe62d0111a24ea6244f376e37dbc3a3d2b4b18a296d86cbbe9269aa81ce
+    bytes: 332
+  - name: market_share_new_registrations_n2_n3.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_n2_n3.csv
+    sha256: fb5b40e65e805a65d9e88cd025346899596d21f803418de95d48248aaca45c8d
+    bytes: 321
+  - name: new_registrations_m1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_m1.csv
+    sha256: dc3bba72171ee8bf593066b47354f81e9f01009ba27842e14f74f495cf3db7b2
+    bytes: 432
+  - name: new_registrations_n1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_n1.csv
+    sha256: de116b63ea6cfafdab707c92bf29f4d54a4b781062228623817848c89c2f4036
+    bytes: 314
+  - name: new_registrations_n2_n3.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_n2_n3.csv
+    sha256: 672949f6ebef2af949ae9effcdcea5992f2bbb3cdfc0444bb3933ac938224583
+    bytes: 287
+
