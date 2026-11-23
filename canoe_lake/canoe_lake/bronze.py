@@ -139,20 +139,20 @@ def ingest_bronze(source_name: str):
         logger.error(f"Failed to write catalog record for {source_name}: {e}")
         return
 
-def register_manual_bronze(source_name: str, file_path: str, collection_date: str, doc_id: str = None, pub_date: str = None, notes: str = None):
-    """Registers a manually downloaded file into the Bronze layer."""
+def register_manual_bronze(source_name: str, file_path: str, collection_date: str, doc_id: str = None, pub_date: str = None, notes: str = None) -> bool:
+    """Registers a manually downloaded file into the Bronze layer. Returns False if registration failed."""
     logger.info(f"Starting manual registration for {source_name}")
     
     src_path = Path(file_path)
     if not src_path.exists():
         logger.error(f"Source file not found: {file_path}")
-        return
+        return False
         
     try:
         col_date = datetime.datetime.strptime(collection_date, "%Y-%m-%d").date()
     except ValueError:
         logger.error(f"Invalid collection date format: {collection_date}. Use YYYY-MM-DD.")
-        return
+        return False
 
     p_date = None
     if pub_date:
@@ -160,7 +160,7 @@ def register_manual_bronze(source_name: str, file_path: str, collection_date: st
             p_date = datetime.datetime.strptime(pub_date, "%Y-%m-%d").date()
         except ValueError:
             logger.error(f"Invalid publication date format: {pub_date}. Use YYYY-MM-DD.")
-            return
+            return False
 
     output_dir = PROJECT_ROOT / "data-lake" / "bronze" / source_name / collection_date
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -187,11 +187,11 @@ def register_manual_bronze(source_name: str, file_path: str, collection_date: st
             logger.info(f"Computed file hash: {file_hash}")
     except Exception as e:
         logger.error(f"Failed to compute hash for {dest_path}: {e}")
-        return
+        return False
 
     if check_idempotency(source_name, file_hash=file_hash):
         logger.info(f"Skipping catalog registration: Bronze record for {source_name} with identical file hash already exists.")
-        return
+        return True
 
     # Write to Catalog
     try:
@@ -220,6 +220,7 @@ def register_manual_bronze(source_name: str, file_path: str, collection_date: st
         ))
         
         logger.info(f"Successfully registered manual Bronze catalog record for {source_name} (ID: {record_id})")
+        return True
     except Exception as e:
         logger.error(f"Failed to write catalog record for {source_name}: {e}")
-        return
+        return False
