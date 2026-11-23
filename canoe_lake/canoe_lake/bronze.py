@@ -18,22 +18,60 @@ def register_ingestor(source_name: str):
         return func
     return decorator
 
-def compute_file_hash(file_path: Path) -> str:
-    """Computes SHA-256 hash of a file or directory."""
-    if file_path.is_dir():
-        # Quick hash of directory contents
-        sha256 = hashlib.sha256()
-        for f in sorted(file_path.iterdir()):
-            if f.is_file():
-                sha256.update(f.name.encode('utf-8'))
-                sha256.update(str(f.stat().st_mtime).encode('utf-8'))
-        return sha256.hexdigest()
-        
+def _sha256_file(file_path: Path) -> str:
     sha256 = hashlib.sha256()
     with open(file_path, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
             sha256.update(chunk)
     return sha256.hexdigest()
+
+def compute_file_hash(file_path: Path) -> str:
+    """Computes a SHA-256 content hash of a file or directory.
+
+    A file hashes to the SHA-256 of its bytes.
+
+    A directory hashes to the SHA-256 of a manifest with one line per file,
+    "<file sha256>  <path relative to the directory>\n", covering every file
+    in every subfolder, sorted by relative path. The hash depends only on file
+    names and contents, never on timestamps, so the same data hashes the same
+    on any machine. It matches this shell command run inside the directory:
+        find . -type f -printf '%P\n' | LC_ALL=C sort | xargs -d '\n' sha256sum | sha256sum
+    """
+    file_path = Path(file_path)
+    if file_path.is_dir():
+        files = sorted(
+            (f for f in file_path.rglob("*") if f.is_file()),
+            key=lambda f: f.relative_to(file_path).as_posix().encode("utf-8"),
+        )
+        manifest = hashlib.sha256()
+        for f in files:
+            rel = f.relative_to(file_path).as_posix()
+            manifest.update(f"{_sha256_file(f)}  {rel}\n".encode("utf-8"))
+        return manifest.hexdigest()
+
+    return _sha256_file(file_path)
+
+def rehash_bronze(apply: bool = False) -> list:
+    """Recomputes file_hash for every bronze record whose file or folder still exists.
+
+    Returns a list of (source_name, file_path, old_hash, new_hash) for records whose
+    stored hash differs from the current content hash. Only writes the new hashes
+    to the catalog when apply is True. Records whose files are missing are skipped.
+    """
+    conn = get_connection()
+    rows = conn.execute("SELECT id, source_name, file_path, file_hash FROM bronze_sources ORDER BY source_name, collection_date").fetchall()
+    changes = []
+    for record_id, source_name, rel_path, old_hash in rows:
+        path = PROJECT_ROOT / rel_path
+        if not path.exists():
+            logger.warning(f"Skipping {source_name}: {rel_path} is missing.")
+            continue
+        new_hash = compute_file_hash(path)
+        if new_hash != old_hash:
+            changes.append((source_name, rel_path, old_hash, new_hash))
+            if apply:
+                conn.execute("UPDATE bronze_sources SET file_hash = ? WHERE id = ?", (new_hash, record_id))
+    return changes
 
 def check_idempotency(source_name: str, collection_date: datetime.date = None, file_hash: str = None) -> bool:
     """Returns True if a record already exists matching the given criteria AND the physical file/folder still exists."""
@@ -170,21 +208,8 @@ def register_manual_bronze(source_name: str, file_path: str, collection_date: st
     shutil.copy2(src_path, dest_path)
     
     try:
-        # Compute file hash
-        file_hash = "unknown"
-        if os.path.exists(dest_path):
-            if os.path.isdir(dest_path):
-                # hash the json file if it exists, else hardcode
-                json_path = os.path.join(dest_path, "rninja_snapshot.json")
-                if os.path.exists(json_path):
-                    with open(json_path, "rb") as f:
-                        file_hash = hashlib.sha256(f.read()).hexdigest()
-                else:
-                    file_hash = "dir_hash"
-            else:
-                with open(dest_path, "rb") as f:
-                    file_hash = hashlib.sha256(f.read()).hexdigest()
-            logger.info(f"Computed file hash: {file_hash}")
+        file_hash = compute_file_hash(dest_path)
+        logger.info(f"Computed file hash: {file_hash}")
     except Exception as e:
         logger.error(f"Failed to compute hash for {dest_path}: {e}")
         return False

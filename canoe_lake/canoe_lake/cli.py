@@ -5,7 +5,7 @@ import os
 import getpass
 from dotenv import load_dotenv
 from canoe_lake.catalog import init_catalog
-from canoe_lake.bronze import ingest_bronze, register_manual_bronze
+from canoe_lake.bronze import ingest_bronze, register_manual_bronze, rehash_bronze
 from canoe_lake.silver import build_silver
 import canoe_lake.ingestors  # Loads the ingestor registry
 import canoe_lake.transformers # Loads the silver transformers
@@ -51,6 +51,9 @@ def main():
     manual_parser.add_argument("--pub-date", help="Publication date (YYYY-MM-DD)")
     manual_parser.add_argument("--notes", help="Description/notes")
 
+    rehash_parser = bronze_subparsers.add_parser("rehash", help="Recompute stored bronze hashes from file contents (dry run unless --apply)")
+    rehash_parser.add_argument("--apply", action="store_true", help="Write the recomputed hashes to the catalog")
+
     # silver command
     silver_parser = subparsers.add_parser("silver", help="Manage Silver layer")
     silver_subparsers = silver_parser.add_subparsers(dest="silver_command", help="Silver commands")
@@ -84,6 +87,12 @@ def main():
             )
             if not registered:
                 sys.exit(1)
+        elif args.bronze_command == "rehash":
+            changes = rehash_bronze(apply=args.apply)
+            for source_name, file_path, old_hash, new_hash in changes:
+                logger.info(f"{source_name}: {file_path}\n    old {old_hash}\n    new {new_hash}")
+            verb = "Updated" if args.apply else "Would update (dry run, pass --apply to write)"
+            logger.info(f"{verb} {len(changes)} bronze record(s).")
         else:
             bronze_parser.print_help()
     elif args.command == "silver":
