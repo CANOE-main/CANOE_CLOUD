@@ -74,7 +74,7 @@ def main():
         if args.bronze_command == "ingest":
             ingest_bronze(args.source)
         elif args.bronze_command == "register-manual":
-            register_manual_bronze(
+            registered = register_manual_bronze(
                 source_name=args.source,
                 file_path=args.file,
                 collection_date=args.collection_date,
@@ -82,6 +82,8 @@ def main():
                 pub_date=args.pub_date,
                 notes=args.notes
             )
+            if not registered:
+                sys.exit(1)
         else:
             bronze_parser.print_help()
     elif args.command == "silver":
