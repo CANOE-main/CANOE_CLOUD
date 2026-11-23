@@ -71,4 +71,10 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 | `hatch` | HATCH technology growth evidence (Zenodo) |
 | `eafo` | EAFO Norway fleet and registrations |
 
+Known-stale pins (checked 2026-11-22). These four ingestors are kept with transport's original checksums, so they currently fail with an error that names the file and gives the actual and pinned checksum or size:
+- `dunsky`: the report page HTML has changed.
+- `statcan_transport`: the `23100308-metadata.json` from WDS has changed. The table ZIP still matches.
+- `epri_regen`: the page has been republished, and the pinned JavaScript data module now returns 404.
+- `eafo`: the page and the Norway CSVs have been updated.
+
 CER Canada's Energy Future is covered by the `cer` ingestor. Sources that cannot be downloaded (GREET, Autonomie/BEAN, RAMP charging profiles, EPA OMEGA extract and reviewed manual values) go through `bronze register-manual`.
