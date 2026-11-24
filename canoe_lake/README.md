@@ -54,7 +54,7 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 |---|---|
 | `nrcan_ceud_transport` | NRCan CEUD Transportation tables, each province separately (AB, BCT, MB, NB, NL, NS, ON, PE, QC, SK) plus Canada |
 | `nrcan_fcr` | NRCan Fuel Consumption Ratings |
-| `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page) |
+| `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page); disabled |
 | `statcan_transport` | StatCan 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 (WDS ZIP and metadata) |
 | `ontario_mto` | Ontario MTO vehicle population ZIPs |
 | `izev` | Transport Canada iZEV incentive records |
@@ -69,12 +69,11 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 | `gcam` | JGCRI GCAM UCD_trn_data_CORE.csv (pinned commit) |
 | `epri_regen` | EPRI US-REGEN v2025 transportation page and data module |
 | `hatch` | HATCH technology growth evidence (Zenodo) |
-| `eafo` | EAFO Norway fleet and registrations |
+| `eafo` | EAFO Norway fleet and registrations; disabled |
 
-Known-stale pins (checked 2026-11-22). These four ingestors are kept with transport's original checksums, so they currently fail with an error that names the file and gives the actual and pinned checksum or size:
-- `dunsky`: the report page HTML has changed.
-- `statcan_transport`: the `23100308-metadata.json` from WDS has changed. The table ZIP still matches.
-- `epri_regen`: the page has been republished, and the pinned JavaScript data module now returns 404.
-- `eafo`: the page and the Norway CSVs have been updated.
+Sources whose transport pins went stale (checked 2026-11-23):
+- `statcan_transport`: each table ZIP includes its `_MetaData.csv`, so the ZIP pin covers the metadata. The WDS metadata JSON is downloaded but not pinned.
+- `epri_regen`: EPRI republished the page and removed the pinned data module, so it is downloaded from its Wayback Machine capture, which matches the pin.
+- `dunsky` and `eafo`: the ingestors are kept, but their `@register_ingestor` decorators are commented out, because no copy matching transport's pins exists. Uncomment them if one turns up. The Dunsky page differs only in cache tokens. EAFO's data has been replaced upstream; Statistics Norway is a possible replacement.
 
 CER Canada's Energy Future is covered by the `cer` ingestor. Sources that cannot be downloaded (GREET, Autonomie/BEAN, RAMP charging profiles, EPA OMEGA extract and reviewed manual values) go through `bronze register-manual`.

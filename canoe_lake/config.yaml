@@ -80,19 +80,18 @@ nrcan_fcr:
     url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/9df1b18d-d036-4783-a61c-99f1f75b3ac5/download/my2026-fuel-consumption-ratings.csv
     md5: e8f8b26255d9534b7989b00f8a0f8650
     bytes: 53702
-# Known-stale pin (2026-11-22): the NRCan report page HTML has changed since transport pinned it,
-# so this ingest fails. Kept as transport pinned it on purpose.
+# Disabled ingestor (decorator commented out). The NRCan page HTML no longer matches transport's pin:
+# only Drupal cache tokens differ, and no pinned copy was found elsewhere (Wayback, publications.gc.ca).
 dunsky:
   url: https://natural-resources.canada.ca/energy-efficiency/transportation-energy-efficiency/resource-library/electric-vehicle-charging-infrastructure-canada
   sha256: e4592af5443703fd1e563fae58ade15fc4cf5591efc142d0c2cb361f776e9730
   bytes: 441179
-# Known-stale pin (2026-11-22): the 23100308 ZIP still matches, but its WDS metadata JSON no longer
-# matches metadata_sha256 (same releaseTime), so this ingest fails. Kept as transport pinned it on purpose.
+# The ZIP includes 23100308_MetaData.csv, so the ZIP pin covers the metadata. Transport's pin on the
+# WDS metadata JSON (08007a6b...) is not used: that JSON changes even when the release does not.
 statcan_transport:
   pins:
     23100308:
       zip_sha256: 09397af821ad73962b555b558d8547fa75ff8c22c28a9d383e20ed58ff43d608
-      metadata_sha256: 08007a6bbbe9ddb6fc9b70743cc698eed9c5d9d7fa9d8683ae55ba4967401ab9
 ontario_mto:
   files:
   - year: 2014
@@ -195,13 +194,13 @@ gcam:
   url: https://raw.githubusercontent.com/JGCRI/gcam-core/11e128fb7ce3e14e9c4daf3903ba73123046a7aa/input/gcamdata/inst/extdata/energy/UCD_trn_data_CORE.csv
   sha256: 0e0c006e7c7ef6209b2ff1b8aa991a0524ad2219a157739d033e94f9d7849ee0
   bytes: 1052797
-# Known-stale pin (2026-11-22): EPRI republished the page, so its sha256 no longer matches, and the pinned
-# payload asset returns 404. This ingest fails. Kept as transport pinned it on purpose.
+# EPRI republished the page and removed the pinned module (404 at
+# https://us-regen-docs.epri.com/assets/transportation.html-YK_JCUYx.js). Its Wayback Machine capture
+# matches transport's pin. Transport's page pin (fddf94ac..., 2099 bytes) is not used: transport only
+# read the page to find this module.
 epri_regen:
   url: https://us-regen-docs.epri.com/v2025/assumptions/transportation.html
-  sha256: fddf94acbf52401acf7dc2e429a0e758c763959dcb6ac60a999c61bd61c438ad
-  bytes: 2099
-  payload_url: https://us-regen-docs.epri.com/assets/transportation.html-YK_JCUYx.js
+  payload_url: https://web.archive.org/web/20260331222007id_/https://us-regen-docs.epri.com/assets/transportation.html-YK_JCUYx.js
   payload_sha256: c8527351b8777769a15f67f682d63fbc70e866bfd8b0485f8d8388fe723ce9e9
   payload_bytes: 85536
 faa:
@@ -310,8 +309,8 @@ hatch:
     url: https://zenodo.org/api/records/19579793/files/Year_First_Commercialization.xlsx/content
     sha256: da8406bf227775d2b7e52d04f4ac9cfaf94cde12c5b53835a8635a1f19fdc280
     bytes: 44851
-# Known-stale pin (2026-11-22): the EAFO page and Norway CSVs have been updated since transport pinned them,
-# so this ingest fails. Kept as transport pinned it on purpose.
+# Disabled ingestor (decorator commented out). EAFO has replaced the pinned page and CSVs with newer data
+# and keeps no old versions. A possible replacement is Statistics Norway (data.ssb.no tables 11823, 07849).
 eafo:
   files:
   - name: eafo_norway_2026-10-07.html

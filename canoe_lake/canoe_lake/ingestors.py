@@ -445,7 +445,9 @@ def ingest_nrcan_fcr(output_dir: Path) -> dict:
         "notes": f"NRCan Fuel Consumption Ratings: {', '.join(item['name'] for item in files)}"
     }
 
-@register_ingestor("dunsky")
+# Disabled: the page no longer matches transport's pin (only Drupal cache tokens differ) and no
+# pinned copy exists elsewhere. Uncomment the decorator to ingest again once a matching copy is found.
+# @register_ingestor("dunsky")
 def ingest_dunsky(output_dir: Path) -> dict:
     """Ingests the Dunsky EV Charging Infrastructure for Canada report page (NRCan, Feb 2024)."""
     cfg = get_config().get("dunsky", {})
@@ -464,7 +466,11 @@ def ingest_dunsky(output_dir: Path) -> dict:
 
 @register_ingestor("statcan_transport")
 def ingest_statcan_transport(output_dir: Path) -> dict:
-    """Ingests StatCan transport tables 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 via WDS."""
+    """Ingests StatCan transport tables 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 via WDS.
+
+    Each full-table ZIP includes its own {pid}_MetaData.csv, so pinning the ZIP pins the metadata.
+    The WDS cube metadata JSON is kept as an unpinned extra: it changes even when the data does not.
+    """
     tables = ["20100021", "20100025", "23100308", "34100254", "23100142"]
     pins = get_config().get("statcan_transport", {}).get("pins", {})
 
@@ -485,14 +491,8 @@ def ingest_statcan_transport(output_dir: Path) -> dict:
         resp = sess.post("https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
                          json=[{"productId": int(tbl)}], timeout=60)
         resp.raise_for_status()
-        file_path = output_dir / f"{tbl}-metadata.json"
-        with open(file_path, "wb") as f:
+        with open(output_dir / f"{tbl}-metadata.json", "wb") as f:
             f.write(resp.content)
-        if pin.get("metadata_sha256"):
-            import hashlib
-            digest = hashlib.sha256(resp.content).hexdigest()
-            if digest != pin["metadata_sha256"]:
-                raise ValueError(f"{file_path.name}: sha256 {digest} does not match pinned {pin['metadata_sha256']}")
 
     return {
         "file_path": str(output_dir),
@@ -683,10 +683,12 @@ def ingest_gcam(output_dir: Path) -> dict:
 
 @register_ingestor("epri_regen")
 def ingest_epri_regen(output_dir: Path) -> dict:
-    """Ingests the EPRI US-REGEN v2025 transportation assumptions page and its data module."""
+    """Ingests the EPRI US-REGEN v2025 transportation data module (the file transport parses).
+
+    EPRI has republished the page and removed the pinned module, so it comes from its Wayback Machine
+    capture, which matches transport's pin. The live page URL is recorded as the source.
+    """
     cfg = get_config().get("epri_regen", {})
-    logger.info(f"Downloading EPRI US-REGEN page from {cfg['url']}")
-    download_file(cfg["url"], output_dir / "transportation.html", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
     logger.info(f"Downloading EPRI US-REGEN data module from {cfg['payload_url']}")
     download_file(cfg["payload_url"], output_dir / cfg["payload_url"].rsplit("/", 1)[-1],
                   sha256=cfg.get("payload_sha256"), size=cfg.get("payload_bytes"))
@@ -696,7 +698,7 @@ def ingest_epri_regen(output_dir: Path) -> dict:
         "source_type": "url",
         "source_url_or_doc_id": cfg["url"],
         "file_format": "dir",
-        "notes": "EPRI US-REGEN v2025 transportation assumptions page and JavaScript data module"
+        "notes": f"EPRI US-REGEN v2025 transportation JavaScript data module, from {cfg['payload_url']}"
     }
 
 @register_ingestor("hatch")
@@ -715,7 +717,9 @@ def ingest_hatch(output_dir: Path) -> dict:
         "notes": "HATCH original (Zenodo 10231865, 10056128) and extended (Zenodo 19579793) files"
     }
 
-@register_ingestor("eafo")
+# Disabled: EAFO has replaced the pinned page and CSVs with newer data and keeps no old versions.
+# Uncomment the decorator to ingest again once a matching copy (or a replacement source) is found.
+# @register_ingestor("eafo")
 def ingest_eafo(output_dir: Path) -> dict:
     """Ingests EAFO Norway fleet, registrations and shares CSVs and their page."""
     import time
