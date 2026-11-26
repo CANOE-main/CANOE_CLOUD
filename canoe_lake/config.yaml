@@ -167,17 +167,20 @@ afdc:
       maximum_vehicle_class: MD
     sha256: 3639671255e8cf269c2c184ce8e70ff956e35bef0d32f6f9ca1651de550db98e
     bytes: 785951
-  - name: canada_mhdv_accessible_2026-11-14.json
-    url: https://developer.nlr.gov/api/alt-fuel-stations/v1.json
-    query:
-      country: CA
-      fuel_type: ELEC
-      access: all
-      status: E
-      limit: all
-      maximum_vehicle_class: MD
-    sha256: a88d8e558b03fb5087524d12853b4b862652cd452d37be3be7e2bc859e58b2fb
-    bytes: 948986
+  # Disabled: this snapshot came from the live v1 endpoint, which has changed since transport pinned it
+  # on 2026-11-14 (955,438 bytes on 2026-11-26), and the historical-date endpoint does not reproduce it.
+  # Uncomment if a matching copy is found.
+  # - name: canada_mhdv_accessible_2026-11-14.json
+  #   url: https://developer.nlr.gov/api/alt-fuel-stations/v1.json
+  #   query:
+  #     country: CA
+  #     fuel_type: ELEC
+  #     access: all
+  #     status: E
+  #     limit: all
+  #     maximum_vehicle_class: MD
+  #   sha256: a88d8e558b03fb5087524d12853b4b862652cd452d37be3be7e2bc859e58b2fb
+  #   bytes: 948986
 nhtsa_cafe:
   url: https://static.nhtsa.gov/nhtsa/downloads/CAFE/2024-FRM-LD-2b3-2027-2035/Central-Analysis/Central_Analysis_Inputs.zip
   sha256: 1c695e1e966bf2f26f9c0cf887c9c1b836e1d18568c5f2fafd63cd6af508a449

@@ -74,6 +74,7 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 Sources whose transport pins went stale (checked 2026-11-23):
 - `statcan_transport`: each table ZIP includes its `_MetaData.csv`, so the ZIP pin covers the metadata. The WDS metadata JSON is downloaded but not pinned.
 - `epri_regen`: EPRI republished the page and removed the pinned data module, so it is downloaded from its Wayback Machine capture, which matches the pin.
+- `afdc`: the 2026-11-14 medium/heavy-vehicle snapshot came from AFDC's live endpoint, which has since changed, so it is commented out in `config.yaml`. The two 2025-12-31 snapshots are still downloaded.
 - `dunsky` and `eafo`: the ingestors are kept, but their `@register_ingestor` decorators are commented out, because no copy matching transport's pins exists. Uncomment them if one turns up. The Dunsky page differs only in cache tokens. EAFO's data has been replaced upstream; Statistics Norway is a possible replacement.
 
 CER Canada's Energy Future is covered by the `cer` ingestor. Sources that cannot be downloaded (GREET, Autonomie/BEAN, RAMP charging profiles, EPA OMEGA extract and reviewed manual values) go through `bronze register-manual`.
