@@ -403,7 +403,9 @@ def ingest_nrcan_ceud_transport(output_dir: Path) -> dict:
     """Ingests NRCan CEUD Transportation Sector Excel tables, every province separately plus Canada."""
     import time
 
-    year = get_config().get("nrcan_ceud_transport", {}).get("year", 2023)
+    cfg = get_config().get("nrcan_ceud_transport", {})
+    year = cfg.get("year", 2023)
+    pins = cfg.get("pins", {}).get(year, {})
     base_url = f"https://oee.nrcan.gc.ca/corporate/statistics/neud/dpa/data_e/downloads/comprehensive/Excel/{year}"
     # NB, NS, PE and NL are each downloaded on their own, and NRCan's combined Atlantic
     # region ("atl") is downloaded too, so silver can use either.
@@ -419,7 +421,8 @@ def ingest_nrcan_ceud_transport(output_dir: Path) -> dict:
     for region, tbl in files:
         name = f"tran_{region}_e_{tbl}.xls"
         logger.info(f"Downloading NRCan CEUD {year} {name}")
-        download_file(f"{base_url}/{name}", output_dir / name, session=sess)
+        pin = pins.get(region, {}).get(tbl, {})
+        download_file(f"{base_url}/{name}", output_dir / name, sha256=pin.get("sha256"), size=pin.get("bytes"), session=sess)
         time.sleep(0.5)  # Be polite
 
     return {
@@ -446,15 +449,18 @@ def ingest_nrcan_fcr(output_dir: Path) -> dict:
         "notes": f"NRCan Fuel Consumption Ratings: {', '.join(item['name'] for item in files)}"
     }
 
-# Disabled: the page no longer matches transport's pin (only Drupal cache tokens differ) and no
-# pinned copy exists elsewhere. Uncomment the decorator to ingest again once a matching copy is found.
-# @register_ingestor("dunsky")
+@register_ingestor("dunsky")
 def ingest_dunsky(output_dir: Path) -> dict:
-    """Ingests the Dunsky EV Charging Infrastructure for Canada report page (NRCan, Feb 2024)."""
+    """Ingests the Dunsky EV Charging Infrastructure for Canada report page (NRCan, Feb 2024).
+
+    The live page changes with every site cache refresh, so the pinned copy comes from
+    download_url (Library and Archives Canada's web archive); url is the source page.
+    """
     cfg = get_config().get("dunsky", {})
     url = cfg["url"]
-    logger.info(f"Downloading Dunsky report page from {url}")
-    file_path = download_file(url, output_dir / "electric-vehicle-charging-infrastructure-canada.html",
+    download_url = cfg.get("download_url", url)
+    logger.info(f"Downloading Dunsky report page from {download_url}")
+    file_path = download_file(download_url, output_dir / "electric-vehicle-charging-infrastructure-canada.html",
                               sha256=cfg.get("sha256"), size=cfg.get("bytes"))
 
     return {
@@ -462,7 +468,7 @@ def ingest_dunsky(output_dir: Path) -> dict:
         "source_type": "url",
         "source_url_or_doc_id": url,
         "file_format": "html",
-        "notes": "Dunsky Electric Vehicle Charging Infrastructure for Canada, 2024 update"
+        "notes": f"Dunsky Electric Vehicle Charging Infrastructure for Canada, 2024 update, from {download_url}"
     }
 
 @register_ingestor("statcan_transport")
@@ -540,9 +546,10 @@ def ingest_izev(output_dir: Path) -> dict:
 @register_ingestor("atb_transport")
 def ingest_atb_transport(output_dir: Path) -> dict:
     """Ingests the NLR (NREL) Transportation ATB data ZIP."""
-    url = get_config().get("atb_transport", {}).get("url", "https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip")
+    cfg = get_config().get("atb_transport", {})
+    url = cfg.get("url", "https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip")
     logger.info(f"Downloading Transportation ATB from {url}")
-    file_path = download_file(url, output_dir / url.rsplit("/", 1)[-1])
+    file_path = download_file(url, output_dir / url.rsplit("/", 1)[-1], sha256=cfg.get("sha256"), size=cfg.get("bytes"))
 
     return {
         "file_path": str(file_path),
@@ -552,10 +559,7 @@ def ingest_atb_transport(output_dir: Path) -> dict:
         "notes": "NLR 2024 Transportation ATB v1"
     }
 
-# Disabled: AFDC has added a field (ev_power_sharing) to every station record, so none of the pinned
-# snapshots reproduce, including the historical-date ones. The lake keeps the copies registered on
-# 2026-11-22. Uncomment the decorator to ingest again once matching copies (or new pins) are available.
-# @register_ingestor("afdc")
+@register_ingestor("afdc")
 def ingest_afdc(output_dir: Path) -> dict:
     """Ingests AFDC Canadian electric charging station snapshots from the NLR API."""
     api_key = os.environ.get("NLR_API_KEY", "DEMO_KEY")
@@ -687,12 +691,10 @@ def ingest_gcam(output_dir: Path) -> dict:
 
 @register_ingestor("epri_regen")
 def ingest_epri_regen(output_dir: Path) -> dict:
-    """Ingests the EPRI US-REGEN v2025 transportation data module (the file transport parses).
-
-    EPRI has republished the page and removed the pinned module, so it comes from its Wayback Machine
-    capture, which matches transport's pin. The live page URL is recorded as the source.
-    """
+    """Ingests the EPRI US-REGEN v2025 transportation assumptions page and its data module."""
     cfg = get_config().get("epri_regen", {})
+    logger.info(f"Downloading EPRI US-REGEN page from {cfg['url']}")
+    download_file(cfg["url"], output_dir / "transportation.html", sha256=cfg.get("sha256"), size=cfg.get("bytes"))
     logger.info(f"Downloading EPRI US-REGEN data module from {cfg['payload_url']}")
     download_file(cfg["payload_url"], output_dir / cfg["payload_url"].rsplit("/", 1)[-1],
                   sha256=cfg.get("payload_sha256"), size=cfg.get("payload_bytes"))
@@ -702,7 +704,7 @@ def ingest_epri_regen(output_dir: Path) -> dict:
         "source_type": "url",
         "source_url_or_doc_id": cfg["url"],
         "file_format": "dir",
-        "notes": f"EPRI US-REGEN v2025 transportation JavaScript data module, from {cfg['payload_url']}"
+        "notes": "EPRI US-REGEN v2025 transportation assumptions page and JavaScript data module"
     }
 
 @register_ingestor("hatch")

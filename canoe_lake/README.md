@@ -54,12 +54,12 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 |---|---|
 | `nrcan_ceud_transport` | NRCan CEUD Transportation tables, each province separately (AB, BCT, MB, NB, NL, NS, ON, PE, QC, SK), NRCan's combined Atlantic region (ATL) and Canada |
 | `nrcan_fcr` | NRCan Fuel Consumption Ratings |
-| `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page); disabled |
+| `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page, pinned copy from Library and Archives Canada's web archive) |
 | `statcan_transport` | StatCan 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 (WDS ZIP and metadata) |
 | `ontario_mto` | Ontario MTO vehicle population ZIPs |
 | `izev` | Transport Canada iZEV incentive records |
 | `atb_transport` | NLR Transportation ATB |
-| `afdc` | AFDC Canadian electric charging stations (`NLR_API_KEY`, default `DEMO_KEY`); disabled |
+| `afdc` | AFDC Canadian electric charging stations (`NLR_API_KEY`, default `DEMO_KEY`); public 2025-12-31 snapshot only |
 | `nhtsa_cafe` | NHTSA CAFE 2024 Central Analysis inputs |
 | `nhts` | FHWA NHTS 2022 public-use data |
 | `faa` | FAA Economic Values, sections 3 and 4 |
@@ -71,10 +71,13 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 | `hatch` | HATCH technology growth evidence (Zenodo) |
 | `eafo` | EAFO Norway fleet and registrations; disabled |
 
-Sources whose transport pins went stale (checked 2026-11-23):
+Pin notes (canoe-transportation's 2026-11 update re-pinned several sources):
+- `nrcan_ceud_transport`: every provincial and national table is pinned. NRCan's combined Atlantic region (`atl`) is not used by transport, so its 17 tables are downloaded unpinned.
+- `atb_transport`, `fueleconomy`, `epri_regen` (page and data module): pinned to transport's current values.
+- `dunsky`: the live page changes with each site cache refresh, so the pinned copy is downloaded from Library and Archives Canada's web archive.
+- `afdc`: only the public 2025-12-31 snapshot is re-pinned. The two medium/heavy-vehicle snapshots are commented out in `config.yaml` until transport re-pins them.
 - `statcan_transport`: each table ZIP includes its `_MetaData.csv`, so the ZIP pin covers the metadata. The WDS metadata JSON is downloaded but not pinned.
-- `epri_regen`: EPRI republished the page and removed the pinned data module, so it is downloaded from its Wayback Machine capture, which matches the pin.
-- `afdc`: disabled like `dunsky` and `eafo`. AFDC has added a field (`ev_power_sharing`) to every station record, so none of the pinned snapshots reproduce, including the historical-date ones. The live 2026-11-14 snapshot is also commented out in `config.yaml`.
-- `dunsky` and `eafo`: the ingestors are kept, but their `@register_ingestor` decorators are commented out, because no copy matching transport's pins exists. Uncomment them if one turns up. The Dunsky page differs only in cache tokens. EAFO's data has been replaced upstream; Statistics Norway is a possible replacement.
+- `eafo`: the ingestor is kept but its `@register_ingestor` decorator is commented out, because EAFO replaced the pinned files upstream. Statistics Norway is a possible replacement.
+- The iZEV data dictionary PDF has no pin; transport does not download it.
 
 CER Canada's Energy Future is covered by the `cer` ingestor. Sources that cannot be downloaded (GREET, Autonomie/BEAN, RAMP charging profiles, EPA OMEGA extract and reviewed manual values) go through `bronze register-manual`.
