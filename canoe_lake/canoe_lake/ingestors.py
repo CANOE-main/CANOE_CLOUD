@@ -551,7 +551,10 @@ def ingest_atb_transport(output_dir: Path) -> dict:
         "notes": "NLR 2024 Transportation ATB v1"
     }
 
-@register_ingestor("afdc")
+# Disabled: AFDC has added a field (ev_power_sharing) to every station record, so none of the pinned
+# snapshots reproduce, including the historical-date ones. The lake keeps the copies registered on
+# 2026-11-22. Uncomment the decorator to ingest again once matching copies (or new pins) are available.
+# @register_ingestor("afdc")
 def ingest_afdc(output_dir: Path) -> dict:
     """Ingests AFDC Canadian electric charging station snapshots from the NLR API."""
     api_key = os.environ.get("NLR_API_KEY", "DEMO_KEY")
