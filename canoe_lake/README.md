@@ -52,7 +52,7 @@ These ingestors download the raw files that canoe-transportation uses (see its `
 
 | Code | Publisher and dataset |
 |---|---|
-| `nrcan_ceud_transport` | NRCan CEUD Transportation tables, each province separately (AB, BCT, MB, NB, NL, NS, ON, PE, QC, SK) plus Canada |
+| `nrcan_ceud_transport` | NRCan CEUD Transportation tables, each province separately (AB, BCT, MB, NB, NL, NS, ON, PE, QC, SK), NRCan's combined Atlantic region (ATL) and Canada |
 | `nrcan_fcr` | NRCan Fuel Consumption Ratings |
 | `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page); disabled |
 | `statcan_transport` | StatCan 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 (WDS ZIP and metadata) |

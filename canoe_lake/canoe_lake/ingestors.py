@@ -405,8 +405,9 @@ def ingest_nrcan_ceud_transport(output_dir: Path) -> dict:
 
     year = get_config().get("nrcan_ceud_transport", {}).get("year", 2023)
     base_url = f"https://oee.nrcan.gc.ca/corporate/statistics/neud/dpa/data_e/downloads/comprehensive/Excel/{year}"
-    # Provinces are not merged here: NB, NS, PE and NL are each downloaded on their own.
-    regions = ["ab", "bct", "mb", "nb", "nl", "ns", "on", "pe", "qc", "sk"]
+    # NB, NS, PE and NL are each downloaded on their own, and NRCan's combined Atlantic
+    # region ("atl") is downloaded too, so silver can use either.
+    regions = ["ab", "atl", "bct", "mb", "nb", "nl", "ns", "on", "pe", "qc", "sk"]
     provincial_tables = [7, 14, 15, 17, 18, 19, 20, 21, 28, 29, 30, 31, 32, 34, 35, 36, 37]
     national_tables = [20, 21, 26, 27, 28]
 
