@@ -49,3 +49,78 @@ def test_register_manual_bronze_missing_file(mock_lake_root):
         file_path=str(mock_lake_root / "missing.csv"),
         collection_date="2026-11-22"
     )
+
+import os
+import shutil
+import subprocess
+from canoe_lake.bronze import compute_file_hash, rehash_bronze
+
+def _make_tree(root: Path):
+    (root / "sub" / "deeper").mkdir(parents=True)
+    (root / "a.csv").write_text("x,y\n1,2\n")
+    (root / "b.txt").write_text("hello")
+    (root / "sub" / "c.csv").write_text("nested")
+    (root / "sub" / "deeper" / "d.bin").write_bytes(b"\x00\x01\x02")
+
+def test_folder_hash_ignores_mtime_and_location(tmp_path):
+    one, two = tmp_path / "one", tmp_path / "two"
+    _make_tree(one)
+    _make_tree(two)
+    for f in two.rglob("*"):
+        os.utime(f, (1, 1))
+    assert compute_file_hash(one) == compute_file_hash(two)
+
+def test_folder_hash_detects_content_change_with_same_mtime(tmp_path):
+    _make_tree(tmp_path)
+    before = compute_file_hash(tmp_path)
+    target = tmp_path / "a.csv"
+    st = target.stat()
+    target.write_text("x,y\n1,3\n")
+    os.utime(target, ns=(st.st_atime_ns, st.st_mtime_ns))
+    assert compute_file_hash(tmp_path) != before
+
+def test_folder_hash_covers_subfolders_and_names(tmp_path):
+    _make_tree(tmp_path)
+    before = compute_file_hash(tmp_path)
+    (tmp_path / "sub" / "deeper" / "d.bin").write_bytes(b"\x00\x01\x03")
+    changed = compute_file_hash(tmp_path)
+    assert changed != before
+    (tmp_path / "sub" / "deeper" / "d.bin").rename(tmp_path / "sub" / "deeper" / "e.bin")
+    assert compute_file_hash(tmp_path) != changed
+
+def test_folder_hash_matches_sha256sum_manifest(tmp_path):
+    if not (shutil.which("sha256sum") and shutil.which("find")):
+        pytest.skip("GNU coreutils not available")
+    _make_tree(tmp_path)
+    out = subprocess.run(
+        "find . -type f -printf '%P\\n' | LC_ALL=C sort | xargs -d '\\n' sha256sum | sha256sum",
+        shell=True, cwd=tmp_path, capture_output=True, text=True, check=True
+    ).stdout.split()[0]
+    assert compute_file_hash(tmp_path) == out
+
+def test_single_file_hash_is_plain_sha256(tmp_path):
+    import hashlib
+    f = tmp_path / "f.csv"
+    f.write_bytes(b"abc" * 100000)
+    assert compute_file_hash(f) == hashlib.sha256(b"abc" * 100000).hexdigest()
+
+def test_rehash_bronze(mock_lake_root):
+    folder = mock_lake_root / "data-lake" / "bronze" / "2026-11-22" / "src"
+    _make_tree(folder)
+    conn = get_connection()
+    conn.execute(
+        "INSERT INTO bronze_sources (id, source_name, source_type, collection_date, collected_by, file_path, file_hash, file_format) "
+        "VALUES ('00000000-0000-0000-0000-000000000001', 'src', 'api', DATE '2026-11-22', 'me', 'data-lake/bronze/2026-11-22/src', 'oldhash', 'dir')"
+    )
+    conn.execute(
+        "INSERT INTO bronze_sources (id, source_name, source_type, collection_date, collected_by, file_path, file_hash, file_format) "
+        "VALUES ('00000000-0000-0000-0000-000000000002', 'gone', 'api', DATE '2026-11-22', 'me', 'data-lake/bronze/2026-11-22/gone', 'keep', 'dir')"
+    )
+    changes = rehash_bronze(apply=False)
+    assert [c[0] for c in changes] == ["src"]
+    assert get_connection().execute("SELECT file_hash FROM bronze_sources WHERE id = '00000000-0000-0000-0000-000000000001'").fetchone()[0] == "oldhash"
+
+    rehash_bronze(apply=True)
+    assert get_connection().execute("SELECT file_hash FROM bronze_sources WHERE id = '00000000-0000-0000-0000-000000000001'").fetchone()[0] == compute_file_hash(folder)
+    assert get_connection().execute("SELECT file_hash FROM bronze_sources WHERE id = '00000000-0000-0000-0000-000000000002'").fetchone()[0] == "keep"
+    assert rehash_bronze(apply=False) == []
