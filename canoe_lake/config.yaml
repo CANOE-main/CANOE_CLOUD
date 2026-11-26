@@ -144,6 +144,8 @@ izev:
   dictionary_url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/12a8a111-d790-49ce-af7c-ec388345e147/download/izev-data-dictionary-bilingual_-ivze-dictionnaire-de-donnees-bilingue-nov-2025.pdf
 atb_transport:
   url: https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip
+# Disabled ingestor (decorator commented out). AFDC added an ev_power_sharing field to every station
+# record, so none of these pins reproduce any more (checked 2026-11-26).
 afdc:
   snapshots:
   - name: canada_public_2025-12-31.json
