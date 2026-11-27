@@ -46,3 +46,38 @@ canoe-lake silver build atb
 - `canoe_lake/ingestors.py`: All `@register_ingestor` definitions for data sources.
 - `canoe_lake/transformers.py`: All `@register_silver` transformations mapping Bronze to Silver.
 - `migrations/01_initial.sql`: The primary schema definition for the Data Lake DuckDB Catalog.
+
+## Transportation sector sources (bronze)
+These ingestors download the raw files that canoe-transportation uses (see its `config/sources.yaml`). There are no silver transforms for them yet. URLs and pinned checksums live in `config.yaml`. If a download does not match its pinned sha256, md5 or byte count, the ingest fails and nothing is catalogued.
+
+| Code | Publisher and dataset |
+|---|---|
+| `nrcan_ceud_transport` | NRCan CEUD Transportation tables, each province separately (AB, BCT, MB, NB, NL, NS, ON, PE, QC, SK), NRCan's combined Atlantic region (ATL) and Canada |
+| `nrcan_fcr` | NRCan Fuel Consumption Ratings |
+| `dunsky` | Dunsky EV Charging Infrastructure for Canada (NRCan report page, pinned copy from Library and Archives Canada's web archive) |
+| `statcan_transport` | StatCan 20-10-0021, 20-10-0025, 23-10-0308, 34-10-0254, 23-10-0142 (WDS ZIP and metadata) |
+| `ontario_mto` | Ontario MTO vehicle population ZIPs |
+| `izev` | Transport Canada iZEV incentive records |
+| `atb_transport` | NLR Transportation ATB |
+| `afdc` | AFDC Canadian electric charging stations (`NLR_API_KEY`, default `DEMO_KEY`) |
+| `nhtsa_cafe` | NHTSA CAFE 2024 Central Analysis inputs |
+| `nhts` | FHWA NHTS 2022 public-use data |
+| `faa` | FAA Economic Values, sections 3 and 4 |
+| `fueleconomy` | FuelEconomy.gov vehicles.csv.zip |
+| `eia_nems` | EIA NEMS trnhdvx.xlsx (pinned commit) |
+| `epa_moves` | EPA MOVES6 population and activity report |
+| `gcam` | JGCRI GCAM UCD_trn_data_CORE.csv (pinned commit) |
+| `epri_regen` | EPRI US-REGEN v2025 transportation page and data module |
+| `hatch` | HATCH technology growth evidence (Zenodo) |
+| `eafo` | EAFO Norway fleet and registrations (pins set by CANOE_CLOUD) |
+
+Pin notes (canoe-transportation's 2026-11 update re-pinned several sources):
+- `nrcan_ceud_transport`: every provincial and national table is pinned. NRCan's combined Atlantic region (`atl`) is not used by transport, so its 17 tables are downloaded unpinned.
+- `atb_transport`, `fueleconomy`, `epri_regen` (page and data module): pinned to transport's current values.
+- `dunsky`: the live page changes with each site cache refresh, so the pinned copy is downloaded from Library and Archives Canada's web archive.
+- `afdc`: transport re-pinned the public 2025-12-31 snapshot. The two medium/heavy-vehicle snapshots are pinned by CANOE_CLOUD (2026-11-27); their values match transport's old pins apart from the new `ev_power_sharing` field. The 2026-11-14 snapshot uses AFDC's live endpoint, so it will drift again.
+- `statcan_transport`: each table ZIP includes its `_MetaData.csv`, so the ZIP pin covers the metadata. The WDS metadata JSON is downloaded but not pinned.
+- `eafo`: pinned by CANOE_CLOUD to the 2026-11-27 CSVs, because EAFO replaced the files transport pinned and keeps no old versions. The page HTML is not pinned, as it carries per-request tokens. EAFO updates the current year's rows (and has restated fleet history), so expect these pins to go stale.
+- The iZEV data dictionary PDF has no pin; transport does not download it.
+
+CER Canada's Energy Future is covered by the `cer` ingestor. Sources that cannot be downloaded (GREET, Autonomie/BEAN, RAMP charging profiles, EPA OMEGA extract and reviewed manual values) go through `bronze register-manual`.

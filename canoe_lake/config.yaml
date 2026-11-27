@@ -49,3 +49,514 @@ weather_mapping:
     PEI: {ca: "CA.PE", us: "ME"}
     NS: {ca: "CA.NS", us: "ME"}
     NB: {ca: "CA.NB", us: "ME"}
+
+# Transportation sector sources (bronze). URLs and pinned checksums follow
+# canoe-transportation config/sources.yaml; a mismatch fails the ingest.
+nrcan_ceud_transport:
+  year: 2023
+  # Pinned by canoe-transportation (registered_snapshots, 2026-11 update). NRCan's combined Atlantic
+  # region (atl) is not used by transport, so it has no pins.
+  pins:
+    2023:
+      "ab":
+        7: {sha256: a3eb2454a9afb09696f1331caf3ecbdd07306a92f77ca569d6c753a245d19f02, bytes: 43520}
+        14: {sha256: 28953289749ba5df5050fbdbc84d2f6ad6bec24600fb04c87cc3fff8564dc4a0, bytes: 33792}
+        15: {sha256: 4a2a6920b8c3bb8ab3da41d6a5db6027289b7e22dfc288437f932890b7b1c5a9, bytes: 33792}
+        17: {sha256: 938b610b6db081a72e1a7f2009ba3219e996bbdbd09f523505fae1003bcb33a7, bytes: 29184}
+        18: {sha256: 5f3efc5582186caeb7eb29dfccb82de8dc8540792c086a5e82b0621f8d352beb, bytes: 29184}
+        19: {sha256: 6b66cf6fa667790dc4e85da24a0cffa03eaa7ee79793d58e3fc7fb4f492cbabe, bytes: 32256}
+        20: {sha256: 4e1679f1963b4c7aa5b7c7416b032b6ede87e392143c7bad6c436058ea4d21f3, bytes: 41984}
+        21: {sha256: 6ca1f0da4a99250fc684dbf4fa7fd5514ea45dad91d912f519f279c379489347, bytes: 30208}
+        28: {sha256: e0b308cc660230f697c8641eb6a313c63f70bdf8b3e17626e0cc250de647ae72, bytes: 40960}
+        29: {sha256: 8172638a06a24ee05091e0d5cacbc0c3da84d43639534b93ea316317bd6ad1f5, bytes: 43008}
+        30: {sha256: f2aba12005f97ce98ebd153ad6023db7e5046ea21043eba69ca150635fb3ce21, bytes: 37888}
+        31: {sha256: 3bc4317382d01001d45b95f83f1ad2d79ee4c0942e289c62795c98cedc951ffc, bytes: 32256}
+        32: {sha256: 4266c269fab702e680becd9bcd2cf4ba32d8d732a96be8e61ca3a83097b7fccf, bytes: 31744}
+        34: {sha256: 116215f0d22e37c008c85d94ef96af5eccffd023773edb6f7fd978c6f2d90066, bytes: 41472}
+        35: {sha256: 25659add060aa4878ffa31d97fc9e3f7ea0c6015e173963b90c4334d1b5e92a1, bytes: 41984}
+        36: {sha256: f3090e1848ec9d4523b802dcc4e82a24958a2c7391b6c840f2d61f213fb1c049, bytes: 40960}
+        37: {sha256: 0465466374aec42fb9b1e850c19d5a950613ac044f017ef759478c9f9c92a58f, bytes: 42496}
+      "bct":
+        7: {sha256: cf2f4578978bf155616892396ac5110976ceb5cc54de92c99b63662bcbe11b96, bytes: 44032}
+        14: {sha256: d68de933083809be3e1377814191a9a46c83c27d3d7175fd7f739384d217238b, bytes: 33792}
+        15: {sha256: 0c82ca01ededa3ecbfcfa0352dddc7697d8b9e297b5eca7195c853d4baf64423, bytes: 33792}
+        17: {sha256: 2981dec50f01c287f48656781acffb00f2beab69dcac4aa2212083b984ccd23a, bytes: 29696}
+        18: {sha256: ddec4ace26beeb952f1f0a68268e3155a3e7d604d0580c952c776ef8a7e51802, bytes: 29696}
+        19: {sha256: 0bd76b1fc7147974808257dca20f9e673398494ccfd7e62c8e2446b1d3e5634d, bytes: 34304}
+        20: {sha256: 7df96094ba2fdd1803e3654d439e9c7f0f0337cc8ff059e7421dd30e95ab71c0, bytes: 41984}
+        21: {sha256: eb379d73bf0915576e33e5a72df431f0b56780cad77c960d6a087350b4fb95ea, bytes: 30208}
+        28: {sha256: 89e71b13b4cf214120ae792656824d4519a8783a37fc2e4c570efe9cc8a21a56, bytes: 40960}
+        29: {sha256: b909d8c3e8c0fc2e55a7dcb0aedaaf3f846fa439629d96a951a1448710d4d06e, bytes: 43008}
+        30: {sha256: 2ca5cc2b01845ba0d89c6a8651c477ad6edfb4cf36be007694572be9aff681c9, bytes: 37888}
+        31: {sha256: 85373204e154793b2b899334cf90d4548082858b2e384e62a30929ab28e9ba49, bytes: 32256}
+        32: {sha256: 41f4f965946b037855d1efbb1b275237b240077e5a186c3a876f762ef8fd01db, bytes: 31744}
+        34: {sha256: 2cd1e8812114a6e16f4783b9a57b21567a6b1038fa27822bee91143e6d603e87, bytes: 41472}
+        35: {sha256: aef105d5527c8aa591d987ea33373bd9c77abc0a53c298dd4ede36c510cf9911, bytes: 41984}
+        36: {sha256: faadeaafb85c572fb8696d0a286af5a95e33ad25a6389aeafb9ecb24f5fe176e, bytes: 40960}
+        37: {sha256: ccf27022ea48f9ef32d6875ef29a3463b05442e0df67b58c2ca6a4931953ca53, bytes: 42496}
+      "mb":
+        7: {sha256: b9026a1157d54016d44fd05d9c0a6ef43541e125a30e7f812aa10d7678ca318a, bytes: 43520}
+        14: {sha256: bd35280184b3df6627f899dd252fff95a20c09f89bd585f5a4dc730719357782, bytes: 33792}
+        15: {sha256: caa043ed35151e14b01c056c7e3313b53ef9db3b3fc31727b86bbdcd454764e6, bytes: 33792}
+        17: {sha256: e3c197a339c3b9b9e895fbd37479c303fa33224b3abc17b27fbc6230f967a3db, bytes: 29184}
+        18: {sha256: f548990c6bb9c851025abded63a2f41c47a2fd0b59bf2b4b4d636f117ac8c137, bytes: 29184}
+        19: {sha256: 807b731e2f3e1c78101273afb9f28bad49da74c9a782cab959d6e62b83536acd, bytes: 32256}
+        20: {sha256: 2f3316babac97c5faf4cc4dc3b96e7462d63c131bc376629e4179655b050f107, bytes: 40960}
+        21: {sha256: 72ec58a550821ab5ef1730fce4a3320f3d283dba43d50178f05778aece0da132, bytes: 30208}
+        28: {sha256: 579ce15c60bcc300fe8851e301c2b050451d643734918ccbc9b12dfbec49a29b, bytes: 40448}
+        29: {sha256: 6cfcb3b0aae07afb0f7bcdf26b62b311716598f83cc7a3760908cf469c5d2aeb, bytes: 41984}
+        30: {sha256: a558010cdef95856839135fb3ff51f1ff2a95e4d8ea9946615fdbd24067b9d0e, bytes: 37888}
+        31: {sha256: 62f3a4be9ca1697ba176010b8b0ec23038152678c405e56d185423d8323f28d5, bytes: 32256}
+        32: {sha256: c723a9616ebd5fa02a094821e7490e7b45a2436d13981dd9a91c166af4b7b06e, bytes: 31744}
+        34: {sha256: 4cbec4ee888a11da844cdae274c4dee19201d2436808549b52d6a9ace44bf191, bytes: 40960}
+        35: {sha256: 8ed14030b5a9398b3bd0a0b0cd3a971cd310fdee7e483e105f7283b3fa4e434d, bytes: 41472}
+        36: {sha256: 4377bc4b4036d27237739e7af7f75394f87df0ebdc88ddafe3138296416ce404, bytes: 40960}
+        37: {sha256: d022379aee669b9f9e2381ced3af8d484aeef3ca939584699c72f1cd7374111c, bytes: 42496}
+      "nb":
+        7: {sha256: da4faf22bac45bce8ddb07f4607b0d114d701c79c4086691bab0d11b6affb516, bytes: 44032}
+        14: {sha256: 213733548e4203761ee5df651c1d1fc20e05dc6763f012115d15c59ee19f00fa, bytes: 33280}
+        15: {sha256: 72367fbcec83a3449ee362a6a269403c158206ebdae65542729a9bbba47d134a, bytes: 33280}
+        17: {sha256: 59943d8b2cbf075b9d84e8fdc1130562b6b1a92e8f663f108fb78c681aa8f1cc, bytes: 29184}
+        18: {sha256: a036ca7d7cd72823c92ce660a1f72d6c7102f0c092641e8b997082d1749ca2d5, bytes: 29184}
+        19: {sha256: f1611f52740a5f71ebe336c410da2fb14e763dd4de21ec59782d9c69f4e7324c, bytes: 33792}
+        20: {sha256: 1f9cce59741aed25f4d6379bb4678cfccb087ef6f66f13ef9a70edf871fc78e2, bytes: 40960}
+        21: {sha256: 89f68b3e28e81ab4e056249c9ef1c5edfc7c9ae425322c2b6b8dd0b405d4323c, bytes: 30208}
+        28: {sha256: f7b85af01e44b580315f7558791f5062a64fca9472f43f94db67cc2214262cc5, bytes: 40448}
+        29: {sha256: 2999c868448d59bab3fc4581e6f0bb17452e34b0a198569433e6815ce389720f, bytes: 41984}
+        30: {sha256: a7bcb5a84b0190bcb8f707be5584ea25b8a33731835775c1720996ec5049a240, bytes: 37888}
+        31: {sha256: 8231396171b2905acdce2e533863af28463ffa443eba60bdcea6b50c26459053, bytes: 32256}
+        32: {sha256: 225e1a02a534e9eb9655e45838a4c103e6a7008c39b47dac108a365aa006e1f6, bytes: 31744}
+        34: {sha256: 50b65c92d04ca29d284f7b1b31545f28a23e078716d7552bf31d22906afdfaa2, bytes: 40960}
+        35: {sha256: a5e86205141dcd5bc133da1c9665e683e36b58ea17b1bf0cebea85dfdb76e301, bytes: 40960}
+        36: {sha256: 65be6c70d15154d7a15f73ee2353f2aa8ef070b95b54e41fc4c02b95bf5bf81e, bytes: 40960}
+        37: {sha256: 9932ad85a6762149692095a41feb0b82edb24a0fe1bfc5708e1947144b2f2191, bytes: 42496}
+      "nl":
+        7: {sha256: fd117436f797bb6999f70c006a785f74e9f6627ac3bacb36af469c86a4318186, bytes: 43008}
+        14: {sha256: 2c1aca92a70e7dd97b6effbe4c1c146f9cb8239cac9f828cb52a4534af2e3495, bytes: 33280}
+        15: {sha256: 006045b3d5fdae4beb52af93b24cfed95957ad92acfb8b2c47eafd573a2e31a1, bytes: 33280}
+        17: {sha256: 96802c2927a645b1f09e5ba695721fdff27f094d2a080bd61742a90f9754bcb8, bytes: 28672}
+        18: {sha256: d03867764386619885851dce74e1c75440691ad900b143d92b4ce289d0796633, bytes: 28672}
+        19: {sha256: 47b2f3176980ea0db008bcf39cc0c7dcf2bbfd57a53c1b1424ce7929b0c34766, bytes: 33792}
+        20: {sha256: 2e29bc2b04f5905d1432191af0cd6708074de9df9200cb15f81447a555c75307, bytes: 40448}
+        21: {sha256: c14895533a7d7fa1ec3b852de0acc831b79d0474d9295236ee051cfacb6bafa5, bytes: 30208}
+        28: {sha256: 897659f148377853c7dce99d08e732eb5f9c5d10eca8f19118b53ab20b521ef0, bytes: 39936}
+        29: {sha256: 206335cc3f3300125be9ff5504a886d7585e4f43c902b923f3aa7d98722b6cd7, bytes: 41472}
+        30: {sha256: 55a4f2d4c760fbd61c16ce403a744ba9e32cb2d6674cacdafed4f5ab55dd97b4, bytes: 37888}
+        31: {sha256: ac21baa598b29157fcad7bf7d3d00128bfb1e36446eaf6eb92315dbfc2f6a915, bytes: 32256}
+        32: {sha256: 1bfa0fd92938b7d585ee3ff813f8618ab0d9c551e0ee2a2fed9e9b6168d33065, bytes: 31744}
+        34: {sha256: 8c34e214a028f9afc2bfb6bbf8c20e06b95b7a04a4609306b2ddbf279485590c, bytes: 40448}
+        35: {sha256: ae2dde72647ff873c6a0c03c754d306a7a8730f528f6bcf298048008d176cdb9, bytes: 40960}
+        36: {sha256: d6dff1dbc04be175a143dc4d1f8738f8a8cc3208371ce35eff551cd10d93e196, bytes: 40960}
+        37: {sha256: f7f843627cde60f32f440d29a831892bd8c92ee1a9ddfd44e23486468ba9c0a7, bytes: 41984}
+      "ns":
+        7: {sha256: dbb218e92ec877b6c25e1f0cc3418ca5878cfe49681bdde44d45d1328925b795, bytes: 44032}
+        14: {sha256: 0025e1174d445ff4558c002d7233555dc3af35d68bb589825962b93b35849e7e, bytes: 33280}
+        15: {sha256: 897a3e4c73c72130887da9c5f6b15cc7ec4a16d9751791298358cbef68956b53, bytes: 33280}
+        17: {sha256: 6bfe2c438f252ced6c94835023b937e2b3c461effb7a5df1b598002565add091, bytes: 29184}
+        18: {sha256: 59c1c581b1fa228f2d333f3fc9b8125091b4e3cbf648117be114c51d9ee9ae99, bytes: 29184}
+        19: {sha256: db60a85ea279892d00ebbcbb33d4c874feebb862dd173c6fcc57ea93f9731177, bytes: 33792}
+        20: {sha256: 6500bba3ba80b6145ed1020df129f053661cf1521c3e2ecf237edcc9c05feb02, bytes: 40960}
+        21: {sha256: 630fc396a6aabe073c75bc21ee91d996c652e954543a6719bbebd43ff2988439, bytes: 30208}
+        28: {sha256: b6e3c7d800d605d239775b715557826d98a024e23d116625f89de467ce742a71, bytes: 40448}
+        29: {sha256: 5171389de8e08f99d880391da6812b65e7722f1a2c85f4a8d07e371c3fdf3c3c, bytes: 41984}
+        30: {sha256: 448b4328a60117e9f15757300400dbaadced170f798c751e1a28c8d00d35e2ea, bytes: 37888}
+        31: {sha256: 2b940e9e3e7f3477e04287a84a6022d9e3b65d56a34e4d79ccbb788356fd41cd, bytes: 32256}
+        32: {sha256: e4b0cf4f88ff67905d3901794a934544e461e2318eee7d3040c86a385220e0ca, bytes: 31744}
+        34: {sha256: 01405ebb9bdeb2dbc9dad671963d0e2a3ab2856739de9a7fe6a0d76d40bdb791, bytes: 40960}
+        35: {sha256: bf38658c1f9443700348ed95f2c52369de993122be470276589549c210f28588, bytes: 41472}
+        36: {sha256: 8a5c85da99af2a731531800273e5c550e5441a309ce1af121626dd7b810a205c, bytes: 40960}
+        37: {sha256: 02c9ab74d0ad7b0828bad30749954cc9432eb8144edea4e1599bd5c1bf046cdd, bytes: 42496}
+      "on":
+        7: {sha256: cfe624ff11057dac5a5cb53fecc384f183e176f9fd688ddb03dcfc212177586d, bytes: 44032}
+        14: {sha256: 48ae869f187332eb176895ec54f48fcc56de3dfdb329e5d3f74dc386f17a2477, bytes: 33792}
+        15: {sha256: ddf71535aee1b2bd6067c00a362ef83e15ed3b464e89d7c4cdcd219d7cb66366, bytes: 33792}
+        17: {sha256: 32ba513928c339749336efd2a2f52c222dc823dc0498f62d21cb7d496e90c7eb, bytes: 29184}
+        18: {sha256: b550ae534bc5b61a0cda3559a1b5ed3f1ecdbeaa306b9b323fd39e89e2d2af7b, bytes: 29184}
+        19: {sha256: 94833b0eb457562a7588320bebd4f714e2bf9443da4210db3a377831341e5d15, bytes: 33792}
+        20: {sha256: bbffeb3527420e3af1837e8e213e43c5d1d759110235289a53e2c4f707ce84f5, bytes: 41984}
+        21: {sha256: 7fef4252dfecf5f1d499718664236c738d001647d43e14314d1009ab8163b4bc, bytes: 30208}
+        28: {sha256: 47a0967ca5eb08452964320f5dc0643948902fa65b35927bc69dd6a996c4460b, bytes: 40960}
+        29: {sha256: be6dd0004793c9464bdd57b9d6a513d9dd38d41eac036b54a34f36041e811ff7, bytes: 43008}
+        30: {sha256: 85e17d29cb2e5e2e072bf3077360b48035f5ec39813cc781910aeea2a1d150d7, bytes: 37888}
+        31: {sha256: 1c2fca64ba6ef67753e34c7b521e3c92b392d8e4db078512708705216be66900, bytes: 32256}
+        32: {sha256: d289856dd23bae3192dc3cc5962f3ccf12cfa300c70bd5082ecf9f751f2759d8, bytes: 31744}
+        34: {sha256: 19753fe71d78957056b7ce4aac149ceb679501c3a8ab51086722f0a590cf35ec, bytes: 41984}
+        35: {sha256: a56e551367a63ce566574f27991dfc7b105a13952fc69bf011ca5ad5d5c0492a, bytes: 41984}
+        36: {sha256: 047f6b9edec83d1c5524e0a5e9c7f8b1aa886e1e08cb392a606c0ebc2aca2ebd, bytes: 40960}
+        37: {sha256: d10da0e7268ce6d93dab4234376805b453254136e64649a069244eed54a193f7, bytes: 41984}
+      "pe":
+        7: {sha256: 2642c7a270a7e415afd2adec4a789895aa547c6d6d542f41a26b70a00029242e, bytes: 43520}
+        14: {sha256: b56e0423068a98d6ffaaf1f1772e4a45a21d029708f55f527c390cb658d704e1, bytes: 33280}
+        15: {sha256: 570048ad417f25348425ddea1bcc67724960a7287ea031a7059dfaf28bf74b8e, bytes: 32768}
+        17: {sha256: e49cbf678fbe56886696db1296ff0c6ccef30d31d54405b84c93efbfe44f755f, bytes: 28672}
+        18: {sha256: 1c2372f1aa5b041779edc1f627fc2a2c6382d34c273719b8ff6b4f5dce65f722, bytes: 28672}
+        19: {sha256: 6aa8fc2e4e17ce76aa42449f066e895106ee759d78748a893e2de053f8937f6b, bytes: 32768}
+        20: {sha256: 73acd2507f052a95fbe5127f28d07eefc15f4a29e29119909fdd5f2aeee6052c, bytes: 39936}
+        21: {sha256: 59e91fd8b2a200b44229c43e268ed163eb052fa47c51e45de82f68ffb454e7fb, bytes: 30208}
+        28: {sha256: 94a75bc4e5ba9ed8f888009175241d453e7528f80a95350f867d8e6161c634e7, bytes: 39936}
+        29: {sha256: d66e9e53336e4f7fff785bb874661ef31c842d423d98d54d0b262c2611d0eea8, bytes: 41472}
+        30: {sha256: 4d304a2a1e4cc392bb806cec16f10ad6fbf39a36a60b081d59564db358f82f01, bytes: 37888}
+        31: {sha256: 2a028da1f6e98e78514847f377cdda4f4c22c513df688d01a25366e1b6d52d1f, bytes: 32256}
+        32: {sha256: d35eadc787011ecf944e5f096ae85569c09052fa630b9f62042ef3f06c515f0d, bytes: 31744}
+        34: {sha256: ef6201b42537cab09e8bfeb5108955506c0d48b2deb8007bd9e31632931def65, bytes: 39424}
+        35: {sha256: 37cf16914213585b992153e04ac662f507b2e9da8eed40e343f4593f0aff56d7, bytes: 39936}
+        36: {sha256: efb54541ba0378e6f9b7a29a1c84dfc623d2ec8b354b97d920849cd561ee39cc, bytes: 40960}
+        37: {sha256: 63f54eafdeba33340123a534dbe8db9ff17dec4f9c914c730b52b17a1673fd60, bytes: 42496}
+      "qc":
+        7: {sha256: a001f0a2a0786b6038715cf7393e6e672cc019beac8174db484e8fea42fd1613, bytes: 44032}
+        14: {sha256: 41587ff3ba7ffc88158974233d0668e58dd546a3f2a8646929457dba32f959cc, bytes: 33792}
+        15: {sha256: e43def370751d87bc17219742d9eaa447f21548151de6ff90ad2bb6d1625d2e2, bytes: 33792}
+        17: {sha256: d08fa03e99c267399611609fb03f79b2a9c4a213fef9c5291a70aff63908a724, bytes: 29184}
+        18: {sha256: e15964afc41c3c3b28308a5bf321509f9754e4e167886e8740d98c2f4be22b97, bytes: 29184}
+        19: {sha256: 3c83f92563593ca1608a55e7149d7530ec8c041f2fb47310c9835536c76a52cf, bytes: 34304}
+        20: {sha256: d91f4fafa9d18646c2a163e279ed424f917b29ad3571c4a85332b0afdfaba545, bytes: 41984}
+        21: {sha256: b1ee84deebc5c80215fa7ee36dff477de42aa4f9c158d602c61af34ee406d55d, bytes: 30208}
+        28: {sha256: 05f8f6180b9f340fc7f38e9c984ff29a70385cde1faad3c1974888d205acbfab, bytes: 40960}
+        29: {sha256: 8347fef2b78272984df05f227bd67b2d411f6b6b351f138e8e675d6670f2c8b3, bytes: 43008}
+        30: {sha256: 2530a2998f0f72aba852dfd8bab0232d300bb589469938dd8e4eb44d9ee7d80e, bytes: 37888}
+        31: {sha256: 28b1b79ada8fb767bfb939ffaf87be26dcf8335fb1d88f43b59d80d5f642acf8, bytes: 32256}
+        32: {sha256: f60c7340436eea3c13f813a028cb84338191246451af2a6be725250b0dcd7cc2, bytes: 31744}
+        34: {sha256: 0bd5b04597bbcb66799f96accb3a32dc2ba18a5e4463a103ab0fbb7f7e3dfd2b, bytes: 41472}
+        35: {sha256: 4d1b5db53c6fcb715e9dd6682c9c51f9cdfde9dbf11b688c90606834ebec7a38, bytes: 41984}
+        36: {sha256: dda409c82c0b588aca34b33dc01f3de8ad05486470c3a3f4d2345e42b56cb74e, bytes: 40960}
+        37: {sha256: 8ec9c31d8505c9e99be092f6fc0c88ca9e261413a5ea374cab6494e671249901, bytes: 42496}
+      "sk":
+        7: {sha256: ba296152d50d5932ff09a14cbee522475961a71769ef6127e27ba6d5db5c4cd4, bytes: 43520}
+        14: {sha256: d6b57cdf4de8eb20726d1e1940aee6470d8643cd658600d33f52690c9884ce33, bytes: 33792}
+        15: {sha256: eea3d964dc4d6d32757a457dc61f97995f0f108f0d34d3b2ebf20007805bc472, bytes: 33792}
+        17: {sha256: 4f226ad13f6a050ce66e0dff8d49e6661d234c817bfedb615ac5a2611c67ba02, bytes: 29184}
+        18: {sha256: 266e6fddc1fbdae91dc3065c3b36e45d6fc5ff87642c384c74124ae172718ecf, bytes: 29184}
+        19: {sha256: 821157c54a7f3976cf5799ebb3ebd2655f039368c8bc1b3be452caaedd3a30f8, bytes: 31744}
+        20: {sha256: 8dcd35442cd7a0f735dee5decd44c621f1865aeeaec7b1636c5a34ca14b28721, bytes: 41984}
+        21: {sha256: e88cb7ca92edaed87b269559a3b863a6195d62f4fc40208689a36890c969d1de, bytes: 30208}
+        28: {sha256: 12042712dd7cb322cd2b89593967fecf9e01a873abcfb2adc5799a31775c6c2f, bytes: 40960}
+        29: {sha256: d9cb7e99ff5f2a7d6d8e573a80f22c0947760ec545595b4f722b9dcd9c8d588f, bytes: 43008}
+        30: {sha256: 14b59cb20e059b9ab7b22356359078fd641f96fe5b6b72cefba7468752718a17, bytes: 37888}
+        31: {sha256: be3481b442d29f63e48d5e23462bc8ea40c6c460b7f5de77d9acfebd50308a77, bytes: 32256}
+        32: {sha256: db2a59a53017d76036cfe4489066932cec34e03e120b5c4bab0c9a9907214525, bytes: 31744}
+        34: {sha256: d36e18b51c4b5c6dd0aae0b31ada5f8b86ed721c34a518983c6e4ea098354aa8, bytes: 41472}
+        35: {sha256: 0703f8af7b0deb0826c1de5edb08f9b499db141eb446d4b3e5127fbf9550de4e, bytes: 41984}
+        36: {sha256: 1877cc9fd3db7112822d611eb4375bdbfc1d0f4f1d656ddc172b6371f7299e3d, bytes: 40960}
+        37: {sha256: 48bc01bb0c683f15a15c5b93cdbc00ef433ee70e67c4d5f0e3462b476174a52b, bytes: 42496}
+      "ca":
+        20: {sha256: bde10084a604c714c1278fc5d9afe4dfddb2d4e880fe1413a33339524cecfbf7, bytes: 34816}
+        21: {sha256: c65a6578e318f53d16ea31a32eb2ea682f4c0be1d09a2899d0742613036d5961, bytes: 34816}
+        26: {sha256: ffdb4588b2e7026a3b6fb4ea6217a6b37e5facafd72159db6bc47460c51bddb1, bytes: 47616}
+        27: {sha256: 1d053797d350f892f0316ef67a3dfad5eed99b812d8858effdfac7c9b22403c2, bytes: 47616}
+        28: {sha256: 83217f152405072cba6ea444aa99201f4bd8f13e7d454c81b353e91b9a118cf6, bytes: 34816}
+nrcan_fcr:
+  files:
+  - name: my2012-2026-battery-electric-vehicles.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/026e45b4-eb63-451f-b34f-d9308ea3a3d9/download/my2012-2026-battery-electric-vehicles.csv
+    md5: aed9e4b209985d925d5c35c729ddd632
+    bytes: 138739
+  - name: my2012-2026-plug-in-hybrid-electric-vehicles.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/8812228b-a6aa-4303-b3d0-66489225120d/download/my2012-2026-plug-in-hybrid-electric-vehicles.csv
+    md5: 13e96c9373ec42288fa16a160b3762e5
+    bytes: 53663
+  - name: my1995-2014-fuel-consumption-ratings-5-cycle.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/42495676-28b7-40f3-b0e0-3d7fe005ca56/download/my1995-2014-fuel-consumption-ratings-5-cycle.csv
+    md5: 6aabfb074aaf1a5fc1febfccf96910ce
+    bytes: 1432995
+  - name: my2015-2024-fuel-consumption-ratings.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/c98b9dc8-b23f-4cd8-8b19-e892da1e4688/download/my2015-2024-fuel-consumption-ratings.csv
+    md5: dfa99fce2a857e2de17df70d40bcf210
+    bytes: 827253
+  - name: my2025-fuel-consumption-ratings.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/d589f2bc-9a85-4f65-be2f-20f17debfcb1/download/my2025-fuel-consumption-ratings.csv
+    md5: cd8f4c0010ce151d1352b26f2a92bf8d
+    bytes: 60700
+  - name: my2026-fuel-consumption-ratings.csv
+    url: https://open.canada.ca/data/dataset/98f1a129-f628-4ce4-b24d-6f16bf24dd64/resource/9df1b18d-d036-4783-a61c-99f1f75b3ac5/download/my2026-fuel-consumption-ratings.csv
+    md5: e8f8b26255d9534b7989b00f8a0f8650
+    bytes: 53702
+# Transport now pins a copy of the report page from Library and Archives Canada's web archive
+# (captured 2026-09-13); the live NRCan page is kept as the source URL.
+dunsky:
+  url: https://natural-resources.canada.ca/energy-efficiency/transportation-energy-efficiency/resource-library/electric-vehicle-charging-infrastructure-canada
+  download_url: https://webarchiveweb.wayback.bac-lac.canada.ca/web/20260913144437id_/https://natural-resources.canada.ca/energy-efficiency/transportation-energy-efficiency/resource-library/electric-vehicle-charging-infrastructure-canada
+  sha256: 6a161a37a46f28946a5787f7dbdf6c03c0023818e0dde8e21ebc6e4dc42a5c15
+  bytes: 446857
+# The ZIP includes 23100308_MetaData.csv, so the ZIP pin covers the metadata. Transport's pin on the
+# WDS metadata JSON (08007a6b...) is not used: that JSON changes even when the release does not.
+statcan_transport:
+  pins:
+    23100308:
+      zip_sha256: 09397af821ad73962b555b558d8547fa75ff8c22c28a9d383e20ed58ff43d608
+ontario_mto:
+  files:
+  - year: 2014
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/f512f110-bf88-4c59-b223-af5ea0a14f6d/download/2014.zip
+    sha256: 3e4d6bede76fa09e38cfd22cf3aa50d17244d04e7222de79726f15ea421647ae
+  - year: 2016
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/f94b0f78-7ebf-4c66-b937-7f7798508606/download/2016.zip
+    sha256: eb10e08613c53612b316c44f7dcbe72fa74d5064915844db6a915301fe716a7e
+  - year: 2017
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/c61643a9-8338-47c9-b0a8-00f7c6298d05/download/vps_2017.zip
+    sha256: 3d2f83dc16bf3f36c67471fdd727bc91bfa09c13cf15b2a0bd7d319a6fc47514
+  - year: 2018
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/52a9329b-1486-48af-94c4-e68e3684b50b/download/2018.zip
+    sha256: 9f6a85addd0b60273d4c7940dfca6c5f8e5d74aa14556ad3bb83c018fe3d6f27
+  - year: 2019
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/8ca7517e-b524-4dde-8c20-b488f5978800/download/vps_2019.zip
+    sha256: f1567693c423ffea2cee59ab8e1c8bda80678ff34efb3e19f7d87bf007f996b4
+  - year: 2020
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/0d6c5fc6-bb23-4b6b-8310-35965ef78548/download/2020.zip
+    sha256: 9de874bb917c225f8062ccd001ca971ac41439dd5f5e56ff95b82ad029af0226
+  - year: 2021
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/de3411dc-c21b-41f3-ae92-59503b414138/download/2021.zip
+    sha256: 1a4a415ba83560e265c781581640ebf3e3a1bff492ba2753b083b841d08c9dfb
+  - year: 2022
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/7ff95539-e7b2-45c7-b2bb-89070ca739cf/download/2022.zip
+    sha256: b15910e2653cd7bbea515ed26cf51102298b5c265f65819434103eba5ef4e3d1
+  - year: 2023
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/997f4781-5ec5-4ac0-b3ec-6f7ab56f475d/download/2023.zip
+    sha256: b9d11dfef4119e1343be168594359b35125fa4354c21cba5ef42a600a524bc25
+  - year: 2024
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/285aeac6-0027-4321-87dd-beb7794f4aab/download/2024.zip
+    sha256: fc95b0a3a13fd5022c086588bb196083df8bcd0ecb55968e2368779087330b70
+  - year: 2025
+    url: https://data.ontario.ca/dataset/1c949987-310c-4bd8-adaa-a9268332e4c0/resource/36dd48e7-f8a8-43e6-a7fa-3d88d356ebf1/download/2025_vps.zip
+    sha256: 672201ec44dd78af96adcce5b3459aa205fb9a03f3983d97d029cd72dcf6e69b
+izev:
+  files:
+  - name: izev-webstats_fy-2019-20-to-fy-2022-23_en_updated-november-2025.csv
+    url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/bba4c959-53ca-4d23-9cde-da3ce771bba2/download/izev-webstats_fy-2019-20-to-fy-2022-23_en_updated-november-2025.csv
+    md5: a51bde3db9a6f217739b885e765e3a1d
+    bytes: 38538045
+  - name: izev-webstats_fy-2023-24_en_updated-november-2025.csv
+    url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/33f35447-fd93-45bc-866c-866aba4b2f4e/download/izev-webstats_fy-2023-24_en_updated-november-2025.csv
+    md5: 9dbab46e9b95c56552baa0293e5b3947
+    bytes: 25304118
+  - name: izev-webstats_fy-2024-25_en_updated-november-2025.csv
+    url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/167cec08-777a-4b29-a3a7-eda79f799bae/download/izev-webstats_fy-2024-25_en_updated-november-2025.csv
+    md5: b9398d9229d5e0ffe770b902a4fa8851
+    bytes: 29288062
+  dictionary_url: https://open.canada.ca/data/dataset/42986a95-be23-436e-af15-7c6bf292a2e1/resource/12a8a111-d790-49ce-af7c-ec388345e147/download/izev-data-dictionary-bilingual_-ivze-dictionnaire-de-donnees-bilingue-nov-2025.pdf
+atb_transport:
+  url: https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip
+  sha256: 447082c63d7433dad1d3691cb216687096921b73a677db204fb45a0631fb45e3
+  bytes: 271753589
+# Transport re-pinned the public 2025-12-31 snapshot after AFDC added the ev_power_sharing field. The two
+# medium/heavy-vehicle snapshots were re-pinned by CANOE_CLOUD on 2026-11-27 (not by transport); their values
+# match transport's old pins apart from that field. The 2026-11-14 one comes from the live v1 endpoint, so
+# it will drift again whenever AFDC updates a station.
+afdc:
+  snapshots:
+  - name: canada_public_2025-12-31.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v0/historical-date/2025-12-31.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: public
+      status: E
+      limit: all
+    sha256: 95409c1676f18b58a9fc9c9b4071cff6258a7764086cc887064e78ed1315aa7e
+    bytes: 45636619
+  - name: canada_mhdv_accessible_2025-12-31.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v0/historical-date/2025-12-31.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: all
+      status: E
+      limit: all
+      maximum_vehicle_class: MD
+    sha256: 7bd82e0128b5b2a821304403f735b1220643c1ac2c5e6856dea9c778a41f20b5
+    bytes: 792023
+  - name: canada_mhdv_accessible_2026-11-14.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v1.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: all
+      status: E
+      limit: all
+      maximum_vehicle_class: MD
+    sha256: adb30fc3efb83727af493bf88a753c39f13d73d1e622b62a84f81bed733ab145
+    bytes: 955438
+nhtsa_cafe:
+  url: https://static.nhtsa.gov/nhtsa/downloads/CAFE/2024-FRM-LD-2b3-2027-2035/Central-Analysis/Central_Analysis_Inputs.zip
+  sha256: 1c695e1e966bf2f26f9c0cf887c9c1b836e1d18568c5f2fafd63cd6af508a449
+  bytes: 9218140
+eia_nems:
+  url: https://media.githubusercontent.com/media/EIAgov/NEMS/1bfbb2af4c3eb6e884227630ae67eb0e0e3c72ba/input/tdm/trnhdvx.xlsx
+  sha256: 87f1766476ba1916c7b8599a2feb0673aa766af12cfb2fbc655bf9fd574ae5aa
+  bytes: 737310
+epa_moves:
+  url: https://www.epa.gov/system/files/documents/2026-09/420r26010.pdf
+  sha256: 2a216e3794368bb33145e6411b5129b3c8f3ad92dc6433ec4baa801cbe435138
+  bytes: 5713495
+gcam:
+  url: https://raw.githubusercontent.com/JGCRI/gcam-core/11e128fb7ce3e14e9c4daf3903ba73123046a7aa/input/gcamdata/inst/extdata/energy/UCD_trn_data_CORE.csv
+  sha256: 0e0c006e7c7ef6209b2ff1b8aa991a0524ad2219a157739d033e94f9d7849ee0
+  bytes: 1052797
+# Transport re-pinned the republished page and its new data module (2026-11 update).
+epri_regen:
+  url: https://us-regen-docs.epri.com/v2025/assumptions/transportation.html
+  sha256: 013a3bdc3d3273132ff8b787de7e873556dacdc7a6969ec16718627c2d0be9a8
+  bytes: 2099
+  payload_url: https://us-regen-docs.epri.com/assets/transportation.html-D61TmitO.js
+  payload_sha256: 20c894bbed65c991fd2d7152d6c6547a7d720fec320e5f7b8c1cbe7d4834f09c
+  payload_bytes: 85891
+faa:
+  files:
+  - name: faa_economic_values_2024_section_3_capacity.pdf
+    url: https://www.faa.gov/regulations_policies/policy_guidance/benefit_cost/econ-value-section-3-capacity.pdf
+    sha256: e59e78ac10a8cf44db15274e8ed7aedd74e87d8c2812f2c26351e7fe4bcf8b96
+    bytes: 759483
+  - name: faa_economic_values_2024_section_4_operating_costs.pdf
+    url: https://www.faa.gov/regulations_policies/policy_guidance/benefit_cost/econ-value-section-4-op-costs.pdf
+    sha256: c0157057f0105535b764889f4a6a1bd571bfcf7a47034d24a9dfd8f13dbbe8d8
+    bytes: 757761
+nhts:
+  files:
+  - name: csv.zip
+    url: https://nhts.ornl.gov/media/2022/download/csv.zip
+    sha256: 64530c396d5f164d2259a22f7042f27bee5147babcd367568ddbfafe6c8bf34c
+    bytes: 4533528
+  - name: codebook.xlsx
+    url: https://nhts.ornl.gov/media/2022/doc/codebook.xlsx
+    sha256: 7e10ff62be0a72b03528f2469e8da850b335b7d761cf6efdfe9eba9b8a513d96
+    bytes: 163714
+  - name: user_guide.pdf
+    url: https://nhts.ornl.gov/media/2022/doc/2022%20NextGen%20NHTS%20User's%20Guide%20V201_PubUse.pdf
+    sha256: bc0e7dc4546db3ff6a465fca928c29f4ecb7fbfe23d44ee7e57add4602d3ba0c
+    bytes: 5666526
+  - name: release_notes.pdf
+    url: https://nhts.ornl.gov/media/2022/doc/2022%20NextGen%20NHTS%20V2.1%20Release%20Notes.pdf
+    sha256: d9f385ab1dc04216f5cb29bd908c520e20e1c52dffef77c17f170e6cefb8b8cb
+    bytes: 732041
+fueleconomy:
+  url: https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip
+  sha256: 5aedc6ba26b38ffbfa7c5995a3c686b51af7151b7becc63e350a4d94ca4e25b4
+  bytes: 2233015
+hatch:
+  files:
+  - name: 10231865_HATCH_1.0.csv
+    url: https://zenodo.org/api/records/10231865/files/HATCH_1.0.csv/content
+    sha256: cb690dbecb4aca6100ab8974884a1c4d0c707d20b51f4dbe1bc888401952e37e
+    bytes: 103054
+  - name: 10231865_HATCH_v1.5_Clean.csv
+    url: https://zenodo.org/api/records/10231865/files/HATCH_v1.5_Clean.csv/content
+    sha256: fad68762b73cbdfe46c23e5303bfec152885cff7ea0243f7ef9b48475ad5d5bf
+    bytes: 4659711
+  - name: 10231865_HATCH_v1.5_DataSources.csv
+    url: https://zenodo.org/api/records/10231865/files/HATCH_v1.5_DataSources.csv/content
+    sha256: 1a84a7f4fe46059cb35bd6e5fea0f6d07d9cfd1bf8b5d64694c92181b49f6c40
+    bytes: 78338
+  - name: 10231865_Tech_Growth_V1.5_variabledescriptions_Clean.yaml
+    url: https://zenodo.org/api/records/10231865/files/Tech_Growth_V1.5_variabledescriptions_Clean.yaml/content
+    sha256: 8ff1b51e7f03d3a89001ccd2d8a4ec6700c32b23a9c454adb12d79f361bc8344
+    bytes: 37139
+  - name: 10056128_AllGrowthRates.csv
+    url: https://zenodo.org/records/10056128/files/AllGrowthRates.csv?download=1
+    sha256: e7f4df9caf102822f17ebe4af22ecd4811277a0d842f4bbdbc4c8c7e6d3e941d
+    bytes: 10062
+  - name: 19579793_Complexity.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Complexity.xlsx/content
+    sha256: a461f38be5868b422d1be1a1c61d93975cd4cc7f03637a2a52d24f14a84a8090
+    bytes: 13471
+  - name: 19579793_Feedstock.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Feedstock.xlsx/content
+    sha256: 06dc2951e6263f3e377465691265d1fe3ee4413a75d10f079372f6db326df6b5
+    bytes: 18503
+  - name: 19579793_Granularity.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Granularity.xlsx/content
+    sha256: b9d8c7a3579494454b6ff2561e03f3a7fa5cd598888792c53727b810372429d0
+    bytes: 51705
+  - name: 19579793_HATCH_growth_characteristics.csv
+    url: https://zenodo.org/api/records/19579793/files/HATCH_growth_characteristics.csv/content
+    sha256: 9d91a695bd9d3d54fac58e43447bbb00fd7d17d9e3d7b64d7f0a2a72c19a4fa7
+    bytes: 2458166
+  - name: 19579793_HATCH_national_1.5.csv
+    url: https://zenodo.org/api/records/19579793/files/HATCH_national_1.5.csv/content
+    sha256: 75e06e0280bc5120c35644b6b560eb2e5f2927921c53ef5fda8f5510985d1688
+    bytes: 4455497
+  - name: 19579793_HATCH_variable_descriptions.xlsx
+    url: https://zenodo.org/api/records/19579793/files/HATCH_variable_descriptions.xlsx/content
+    sha256: c58f33ffb11ce630c116d98a5afe723026fa3ba87c4bf45ec5774540f6d86797
+    bytes: 15501
+  - name: 19579793_MaterialUse.xlsx
+    url: https://zenodo.org/api/records/19579793/files/MaterialUse.xlsx/content
+    sha256: 6f41856d8f2f975dec97c4cde6152087f3c813fd4a25153f7a87e38c015067db
+    bytes: 77248
+  - name: 19579793_Need_For_Customization.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Need_For_Customization.xlsx/content
+    sha256: 3c53ca5be2aec8af74cea66bb9f34a5c51aa941c7ee134627a4a940fa7dda75b
+    bytes: 13456
+  - name: 19579793_Tech_Lifetime.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Tech_Lifetime.xlsx/content
+    sha256: 17eb1861073e61498cc2a04e8fa1456b2278500f973958a0c70deda5aa304b6c
+    bytes: 33770
+  - name: 19579793_Tech_Replacement.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Tech_Replacement.xlsx/content
+    sha256: c23ceb0f100f33c205c57f6d1d6e2bdd6c79fd33b869544caf630b0a64635f1a
+    bytes: 17974
+  - name: 19579793_Technology Categories.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Technology%20Categories.xlsx/content
+    sha256: dc8a487635db0c197795416ff4cca38522ceee483acd49fc47b0990526ddcccc
+    bytes: 15322
+  - name: 19579793_Type_Of_Adopter.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Type_Of_Adopter.xlsx/content
+    sha256: 9a721f339682962966b9522e97ee421e5ba88ddab48692dd9f040fa12d93278b
+    bytes: 13434
+  - name: 19579793_Year_First_Commercialization.xlsx
+    url: https://zenodo.org/api/records/19579793/files/Year_First_Commercialization.xlsx/content
+    sha256: da8406bf227775d2b7e52d04f4ac9cfaf94cde12c5b53835a8635a1f19fdc280
+    bytes: 44851
+# Re-pinned by CANOE_CLOUD on 2026-11-27 (not by transport): EAFO replaced the files transport pinned
+# on 2026-10-07 and keeps no old versions. The page HTML carries per-request tokens, so it is unpinned.
+eafo:
+  files:
+  - name: eafo_norway_vehicles-and-fleet.html
+    url: https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/norway/vehicles-and-fleet
+  - name: af_percentage_total_fleet_m1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_m1.csv
+    sha256: 1d4d86bcaec5cb5ad81759d4f3a36481f18095143d40f5016bf18e7839569892
+    bytes: 477
+  - name: af_percentage_total_fleet_n1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_n1.csv
+    sha256: 6763e99349bd054046ff6e2e8f7390867fb730c62509410ac3bb66173be977a9
+    bytes: 358
+  - name: af_percentage_total_fleet_n2_n3.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_n2_n3.csv
+    sha256: f20e411ae690f89fabd55638a0de5a949e0842b6fbff27f1a2a9100ef0ae4026
+    bytes: 341
+  - name: fleet_m1_total_number.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_m1_total_number.csv
+    sha256: 1b7fee2a83b5fed163c8453f0fe38f75ebeb9e53945e46de3db6346f42c375a9
+    bytes: 532
+  - name: fleet_n1_total_number.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_n1_total_number.csv
+    sha256: 17a243fb142feb8ffd9358382872ea51924084a310c8543337cb7f0330625e3a
+    bytes: 371
+  - name: fleet_n2_n3_total_number.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_n2_n3_total_number.csv
+    sha256: f70057eec11324f7faa597fa6a3e6b56b4546b79ae172ca9bb44b8f4c17e208f
+    bytes: 329
+  - name: market_share_new_registrations_m1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_m1.csv
+    sha256: 40c1ec9303d57c585d21c1d092959df9c7ec3d34e69b865681673d370ab0e32f
+    bytes: 446
+  - name: market_share_new_registrations_n1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_n1.csv
+    sha256: 7a6b91bfd6c4083d8945de0b069bbf873521edf02d4d02801cac7003ebb4ea72
+    bytes: 332
+  - name: market_share_new_registrations_n2_n3.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_n2_n3.csv
+    sha256: b0dfdad1550cef4d6b4057e8b992c6a1074280e77ec811ad998faee1e30c440b
+    bytes: 322
+  - name: new_registrations_m1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_m1.csv
+    sha256: 6017249401a8499058bfd219eb254f92ae2006b1cbefc902aaf7fab5d35a44bc
+    bytes: 433
+  - name: new_registrations_n1.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_n1.csv
+    sha256: 8372a51c76c4b78999910637a1d5531392e9d67d35ed780cdc771e2229d9692f
+    bytes: 315
+  - name: new_registrations_n2_n3.csv
+    url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_n2_n3.csv
+    sha256: 47ef80bd191b57445e994ec385364a3e6c3b65619a8093a0b3fc15bf85f1aa04
+    bytes: 287
+
