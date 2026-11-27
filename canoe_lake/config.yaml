@@ -337,8 +337,10 @@ atb_transport:
   url: https://atb.nlr.gov/img/other/2024_atb_transportation_data_v1.zip
   sha256: 447082c63d7433dad1d3691cb216687096921b73a677db204fb45a0631fb45e3
   bytes: 271753589
-# Transport re-pinned the public 2025-12-31 snapshot after AFDC added the ev_power_sharing field.
-# Its two medium/heavy-vehicle snapshots still carry the old pins, so they are commented out.
+# Transport re-pinned the public 2025-12-31 snapshot after AFDC added the ev_power_sharing field. The two
+# medium/heavy-vehicle snapshots were re-pinned by CANOE_CLOUD on 2026-11-27 (not by transport); their values
+# match transport's old pins apart from that field. The 2026-11-14 one comes from the live v1 endpoint, so
+# it will drift again whenever AFDC updates a station.
 afdc:
   snapshots:
   - name: canada_public_2025-12-31.json
@@ -351,32 +353,28 @@ afdc:
       limit: all
     sha256: 95409c1676f18b58a9fc9c9b4071cff6258a7764086cc887064e78ed1315aa7e
     bytes: 45636619
-  # Disabled: transport has not re-pinned this snapshot since AFDC added ev_power_sharing.
-  # - name: canada_mhdv_accessible_2025-12-31.json
-  #   url: https://developer.nlr.gov/api/alt-fuel-stations/v0/historical-date/2025-12-31.json
-  #   query:
-  #     country: CA
-  #     fuel_type: ELEC
-  #     access: all
-  #     status: E
-  #     limit: all
-  #     maximum_vehicle_class: MD
-  #   sha256: 3639671255e8cf269c2c184ce8e70ff956e35bef0d32f6f9ca1651de550db98e
-  #   bytes: 785951
-  # Disabled: this snapshot came from the live v1 endpoint, which has changed since transport pinned it
-  # on 2026-11-14 (955,438 bytes on 2026-11-26), and the historical-date endpoint does not reproduce it.
-  # Uncomment if a matching copy is found.
-  # - name: canada_mhdv_accessible_2026-11-14.json
-  #   url: https://developer.nlr.gov/api/alt-fuel-stations/v1.json
-  #   query:
-  #     country: CA
-  #     fuel_type: ELEC
-  #     access: all
-  #     status: E
-  #     limit: all
-  #     maximum_vehicle_class: MD
-  #   sha256: a88d8e558b03fb5087524d12853b4b862652cd452d37be3be7e2bc859e58b2fb
-  #   bytes: 948986
+  - name: canada_mhdv_accessible_2025-12-31.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v0/historical-date/2025-12-31.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: all
+      status: E
+      limit: all
+      maximum_vehicle_class: MD
+    sha256: 7bd82e0128b5b2a821304403f735b1220643c1ac2c5e6856dea9c778a41f20b5
+    bytes: 792023
+  - name: canada_mhdv_accessible_2026-11-14.json
+    url: https://developer.nlr.gov/api/alt-fuel-stations/v1.json
+    query:
+      country: CA
+      fuel_type: ELEC
+      access: all
+      status: E
+      limit: all
+      maximum_vehicle_class: MD
+    sha256: adb30fc3efb83727af493bf88a753c39f13d73d1e622b62a84f81bed733ab145
+    bytes: 955438
 nhtsa_cafe:
   url: https://static.nhtsa.gov/nhtsa/downloads/CAFE/2024-FRM-LD-2b3-2027-2035/Central-Analysis/Central_Analysis_Inputs.zip
   sha256: 1c695e1e966bf2f26f9c0cf887c9c1b836e1d18568c5f2fafd63cd6af508a449
@@ -507,60 +505,58 @@ hatch:
     url: https://zenodo.org/api/records/19579793/files/Year_First_Commercialization.xlsx/content
     sha256: da8406bf227775d2b7e52d04f4ac9cfaf94cde12c5b53835a8635a1f19fdc280
     bytes: 44851
-# Disabled ingestor (decorator commented out). EAFO has replaced the pinned page and CSVs with newer data
-# and keeps no old versions. A possible replacement is Statistics Norway (data.ssb.no tables 11823, 07849).
+# Re-pinned by CANOE_CLOUD on 2026-11-27 (not by transport): EAFO replaced the files transport pinned
+# on 2026-10-07 and keeps no old versions. The page HTML carries per-request tokens, so it is unpinned.
 eafo:
   files:
-  - name: eafo_norway_2026-10-07.html
+  - name: eafo_norway_vehicles-and-fleet.html
     url: https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/norway/vehicles-and-fleet
-    sha256: f08f9f60cd1985280a57c3f580dc96caa272d16ead8a034fa1c70b3777f9d7f5
-    bytes: 109119
   - name: af_percentage_total_fleet_m1.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_m1.csv
-    sha256: 4192409ec8ec49c8a36d87b6a6a727e9e4a123af2e799909b9e70f4e2c01f6a1
-    bytes: 479
+    sha256: 1d4d86bcaec5cb5ad81759d4f3a36481f18095143d40f5016bf18e7839569892
+    bytes: 477
   - name: af_percentage_total_fleet_n1.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_n1.csv
-    sha256: 97a00600e4c3e17dd9b011c609c07a260c37f7345f3771001f7d711b5304b05f
+    sha256: 6763e99349bd054046ff6e2e8f7390867fb730c62509410ac3bb66173be977a9
     bytes: 358
   - name: af_percentage_total_fleet_n2_n3.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/af_percentage_total_fleet_n2_n3.csv
-    sha256: 8dd6318344c0fbbedcaaad8aa803e0c0af0d164ee5aefc0744c436764ac1e6eb
-    bytes: 342
+    sha256: f20e411ae690f89fabd55638a0de5a949e0842b6fbff27f1a2a9100ef0ae4026
+    bytes: 341
   - name: fleet_m1_total_number.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_m1_total_number.csv
-    sha256: 40f657ff0724ae6b1bba0e213731fe3180f0b8f1390cb3b3207339e8dd7d3694
+    sha256: 1b7fee2a83b5fed163c8453f0fe38f75ebeb9e53945e46de3db6346f42c375a9
     bytes: 532
   - name: fleet_n1_total_number.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_n1_total_number.csv
-    sha256: c5e0e390584431fe2a741ddf6eb52f12b31e862dac383cf11e574f8501fd98c6
+    sha256: 17a243fb142feb8ffd9358382872ea51924084a310c8543337cb7f0330625e3a
     bytes: 371
   - name: fleet_n2_n3_total_number.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/fleet_n2_n3_total_number.csv
-    sha256: 87e5ebcff48a795f1fefb6356e3bdb2da0bb2223ffa860c8224cb9ddd9c042c9
+    sha256: f70057eec11324f7faa597fa6a3e6b56b4546b79ae172ca9bb44b8f4c17e208f
     bytes: 329
   - name: market_share_new_registrations_m1.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_m1.csv
-    sha256: 274f9fbfc631f4c1b4b33be867934cbb6fcd0983f5b4104ed7adcc35700c7b6e
-    bytes: 447
+    sha256: 40c1ec9303d57c585d21c1d092959df9c7ec3d34e69b865681673d370ab0e32f
+    bytes: 446
   - name: market_share_new_registrations_n1.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_n1.csv
-    sha256: 09415fe62d0111a24ea6244f376e37dbc3a3d2b4b18a296d86cbbe9269aa81ce
+    sha256: 7a6b91bfd6c4083d8945de0b069bbf873521edf02d4d02801cac7003ebb4ea72
     bytes: 332
   - name: market_share_new_registrations_n2_n3.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/market_share_new_registrations_n2_n3.csv
-    sha256: fb5b40e65e805a65d9e88cd025346899596d21f803418de95d48248aaca45c8d
-    bytes: 321
+    sha256: b0dfdad1550cef4d6b4057e8b992c6a1074280e77ec811ad998faee1e30c440b
+    bytes: 322
   - name: new_registrations_m1.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_m1.csv
-    sha256: dc3bba72171ee8bf593066b47354f81e9f01009ba27842e14f74f495cf3db7b2
-    bytes: 432
+    sha256: 6017249401a8499058bfd219eb254f92ae2006b1cbefc902aaf7fab5d35a44bc
+    bytes: 433
   - name: new_registrations_n1.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_n1.csv
-    sha256: de116b63ea6cfafdab707c92bf29f4d54a4b781062228623817848c89c2f4036
-    bytes: 314
+    sha256: 8372a51c76c4b78999910637a1d5531392e9d67d35ed780cdc771e2229d9692f
+    bytes: 315
   - name: new_registrations_n2_n3.csv
     url: https://alternative-fuels-observatory.ec.europa.eu/sites/default/files/csv/norway/new_registrations_n2_n3.csv
-    sha256: 672949f6ebef2af949ae9effcdcea5992f2bbb3cdfc0444bb3933ac938224583
+    sha256: 47ef80bd191b57445e994ec385364a3e6c3b65619a8093a0b3fc15bf85f1aa04
     bytes: 287
 

@@ -723,9 +723,7 @@ def ingest_hatch(output_dir: Path) -> dict:
         "notes": "HATCH original (Zenodo 10231865, 10056128) and extended (Zenodo 19579793) files"
     }
 
-# Disabled: EAFO has replaced the pinned page and CSVs with newer data and keeps no old versions.
-# Uncomment the decorator to ingest again once a matching copy (or a replacement source) is found.
-# @register_ingestor("eafo")
+@register_ingestor("eafo")
 def ingest_eafo(output_dir: Path) -> dict:
     """Ingests EAFO Norway fleet, registrations and shares CSVs and their page."""
     import time
